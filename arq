@@ -1,0 +1,52 @@
+r0 bh     black hole, always 00
+r1 a      general purpose
+r2 b      general purpose
+r3 c      general purpose
+r4 d      general purpose
+r5 e      general purpose
+r6 f      general purpose
+r7 g      general purpose
+
+                    76543210
+r8 fl         flags Q___CNVZ
+r9 ip rip pc  instruction pointer
+ra sp         stack pointer
+rb ??         ????
+rc cs         ????
+rd ds         data segment (8 bit, shift 16)
+re lr         link register
+rf wh         white hole, always ff
+        
+
+call addr
+    mov  lr addr
+    xchg lr ip
+
+ret
+    mov  ip lr
+
+ip un valor
+registro un valor de ip
+
+                                           AKA
+mov   r4 r4         RRRR 00 00 C___ RRRR   CopyRegister, return, nop
+xchg  r4 r4         RRRR 00 01 C___ RRRR   call
+load  r4 imm8       RRRR 00 10 DDDD DDDD   SetRegister
+
+push  r4            RRRR 00 11 C00_ ____
+pop   r4            RRRR 00 11 C01_ ____
+setcc imm8          MMMM 00 11 1___ QQQQ   
+
+                        ALU     ALU
+add   r4 r4         RRRR 01 __ C000 RRRR
+sub   r4 r4         RRRR 01 __ C001 RRRR  Compare
+or    r4 r4         RRRR 01 __ C010 RRRR
+and   r4 r4         RRRR 01 __ C011 RRRR
+lsr   r4 imm4       RRRR 01 __ C100 IIII
+lsl   r4 imm4       RRRR 01 __ C101 IIII
+asr   r4 imm4       RRRR 01 __ C110 IIII
+xor   r4 r4         RRRR 01 __ C111 RRRR  not (white)
+
+                         !
+store [addr] r4     RRRR 10 AA AAAAAAAA   writeToMem
+load  r4 [addr]     RRRR 11 AA AAAAAAAA   readFromMem
