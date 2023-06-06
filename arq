@@ -29,24 +29,24 @@ ip un valor
 registro un valor de ip
 
                                            AKA
-mov   r4 r4         RRRR 00 00 C___ RRRR   CopyRegister, return, nop
-xchg  r4 r4         RRRR 00 01 C___ RRRR   call
-load  r4 imm8       RRRR 00 10 DDDD DDDD   SetRegister
+store [imm10] r4    11 AA AAAA AAAA RRRR   writeToMemImmediate
+load  r4 [imm10]    10 AA AAAA AAAA RRRR   readFromMemImmediate
+                                         
+asr   r4 imm4       01 11 C111 IIII RRRR 
+lsl   r4 imm4       01 11 C110 IIII RRRR 
+lsr   r4 imm4       01 11 C101 IIII RRRR 
+xor   r4 r4         01 11 C100 RRRR RRRR  not (white)
+and   r4 r4         01 11 C011 RRRR RRRR 
+or    r4 r4         01 11 C010 RRRR RRRR 
+sub   r4 r4         01 11 C001 RRRR RRRR  Compare
+add   r4 r4         01 11 C000 RRRR RRRR 
+                                         
+mov   r4 imm8       01 10 DDDD DDDD RRRR   SetRegister
+setcc imm8          01 01 C___ MMMM QQQQ   
+                                         
+store [r4] r4       00 11 C___ RRRR RRRR   writeToMemIndirect
+load  r4 [r4]       00 10 C___ RRRR RRRR   readFromMemIndirect
+xchg  r4 r4         00 01 C___ RRRR RRRR   call
+mov   r4 r4         00 00 C___ RRRR RRRR   CopyRegister, return, nop
 
-push  r4            RRRR 00 11 C00_ ____
-pop   r4            RRRR 00 11 C01_ ____
-setcc imm8          MMMM 00 11 1___ QQQQ   
 
-                        ALU     ALU
-add   r4 r4         RRRR 01 __ C000 RRRR
-sub   r4 r4         RRRR 01 __ C001 RRRR  Compare
-or    r4 r4         RRRR 01 __ C010 RRRR
-and   r4 r4         RRRR 01 __ C011 RRRR
-lsr   r4 imm4       RRRR 01 __ C100 IIII
-lsl   r4 imm4       RRRR 01 __ C101 IIII
-asr   r4 imm4       RRRR 01 __ C110 IIII
-xor   r4 r4         RRRR 01 __ C111 RRRR  not (white)
-
-                         !
-store [addr] r4     RRRR 10 AA AAAAAAAA   writeToMem
-load  r4 [addr]     RRRR 11 AA AAAAAAAA   readFromMem
