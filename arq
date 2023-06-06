@@ -28,25 +28,28 @@ ret
 ip un valor
 registro un valor de ip
 
-                                           AKA
-store [imm10] r4    11 AA AAAA AAAA RRRR   writeToMemImmediate
-load  r4 [imm10]    10 AA AAAA AAAA RRRR   readFromMemImmediate
-mov   r4 imm8       01 11 DDDD DDDD RRRR   SetRegister
+                                            AKA
+store [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate
+load  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate
 
-sl    r4 imm4       01 10 111C _III RRRR 
-sr    r4 imm4       01 10 110C AIII RRRR   A if arithmetic
-cmp   r4 r4         01 10 101C RRRR RRRR 
-and   r4 r4         01 10 100C RRRR RRRR 
-or    r4 r4         01 10 011C RRRR RRRR 
-xor   r4 r4         01 10 010C RRRR RRRR  not (white)
-sub   r4 r4         01 10 001C RRRR RRRR  Compare
-add   r4 r4         01 10 000C RRRR RRRR 
-setcc imm8          01 01 ___C MMMM QQQQ   
+mov   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister
+
+sl    r4 imm4       01 10 111Q _III RRRR 
+sr    r4 imm4       01 10 110Q LIII RRRR    L if logical
+cmp   r4 r4         01 10 101Q RRRR RRRR    Compare 
+and   r4 r4         01 10 100Q RRRR RRRR 
+or    r4 r4         01 10 011Q RRRR RRRR 
+xor   r4 r4         01 10 010Q RRRR RRRR    not (white)
+sub   r4 r4         01 10 001Q RRRR RRRR    
+add   r4 r4         01 10 000Q RRRR RRRR 
+
+setcc imm8          01 01 ___Q MMMM FFFF     
     ... clearcc
-store [r4] r4       00 11 ___C RRRR RRRR   writeToMemIndirect
-load  r4 [r4]       00 10 ___C RRRR RRRR   readFromMemIndirect
-xchg  r4 r4         00 01 ___C RRRR RRRR   call
-mov   r4 r4         00 00 ___C RRRR RRRR   CopyRegister, return, nop
+
+store [r4] r4       00 11 ___C RRRR RRRR    writeToMemIndirect
+load  r4 [r4]       00 10 ___C RRRR RRRR    readFromMemIndirect
+xchg  r4 r4         00 01 ___C RRRR RRRR    call
+mov   r4 r4         00 00 ___C RRRR RRRR    CopyRegister, return, nop
 
 
 memoria:
