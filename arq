@@ -12,8 +12,8 @@ r8 fl         flags Q___CNVZ
 r9 ip rip pc  instruction pointer
 ra sp         stack pointer
 rb ??         ????
-rc cs         ????
-rd ds         data segment (8 bit, shift 16)
+rc cs         code segment (need +1 bit -- 8 bit)
+rd ds         data segment (need +2 bit -- 8 bit)
 re lr         link register
 rf wh         white hole, always ff
         
@@ -31,22 +31,26 @@ registro un valor de ip
                                            AKA
 store [imm10] r4    11 AA AAAA AAAA RRRR   writeToMemImmediate
 load  r4 [imm10]    10 AA AAAA AAAA RRRR   readFromMemImmediate
-                                         
-asr   r4 imm4       01 11 C111 IIII RRRR 
-lsl   r4 imm4       01 11 C110 IIII RRRR 
-lsr   r4 imm4       01 11 C101 IIII RRRR 
-xor   r4 r4         01 11 C100 RRRR RRRR  not (white)
-and   r4 r4         01 11 C011 RRRR RRRR 
-or    r4 r4         01 11 C010 RRRR RRRR 
-sub   r4 r4         01 11 C001 RRRR RRRR  Compare
-add   r4 r4         01 11 C000 RRRR RRRR 
-                                         
-mov   r4 imm8       01 10 DDDD DDDD RRRR   SetRegister
-setcc imm8          01 01 C___ MMMM QQQQ   
-                                         
-store [r4] r4       00 11 C___ RRRR RRRR   writeToMemIndirect
-load  r4 [r4]       00 10 C___ RRRR RRRR   readFromMemIndirect
-xchg  r4 r4         00 01 C___ RRRR RRRR   call
-mov   r4 r4         00 00 C___ RRRR RRRR   CopyRegister, return, nop
+mov   r4 imm8       01 11 DDDD DDDD RRRR   SetRegister
+
+sl    r4 imm4       01 10 111C _III RRRR 
+sr    r4 imm4       01 10 110C AIII RRRR   A if arithmetic
+cmp   r4 r4         01 10 101C RRRR RRRR 
+and   r4 r4         01 10 100C RRRR RRRR 
+or    r4 r4         01 10 011C RRRR RRRR 
+xor   r4 r4         01 10 010C RRRR RRRR  not (white)
+sub   r4 r4         01 10 001C RRRR RRRR  Compare
+add   r4 r4         01 10 000C RRRR RRRR 
+setcc imm8          01 01 ___C MMMM QQQQ   
+    ... clearcc
+store [r4] r4       00 11 ___C RRRR RRRR   writeToMemIndirect
+load  r4 [r4]       00 10 ___C RRRR RRRR   readFromMemIndirect
+xchg  r4 r4         00 01 ___C RRRR RRRR   call
+mov   r4 r4         00 00 ___C RRRR RRRR   CopyRegister, return, nop
 
 
+memoria:
+    1kb datos
+        direccionable a 8bit (10bit addr)
+    1kb codigo (512 ins de 16b)
+        direccionable a 16bit (9bit addr)
