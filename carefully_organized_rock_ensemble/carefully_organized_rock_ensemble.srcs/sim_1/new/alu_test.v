@@ -32,17 +32,22 @@ module alu_test();
         .r(r)
     );
     
+    always 
+        #5 clk =~ clk;
+    
+    /*
+    ESTO NO
     always @(*)
     begin
-        clk = 1; 
-        #5; 
-        clk = 0; 
         #5; // periodo 10ns
+        clk = ~clk;
     end
+    */
     
     initial
     begin
-        $readmemb("alu_test_data.mem", testvector ) ;
+        clk = 0;
+        $readmemb("testdata_alu.mem", testvector);
         vectornum = 0;
         errors = 0;
         reset = 1; 
@@ -50,9 +55,10 @@ module alu_test();
         reset = 0;
     end
     
-    always @(posedge clk)
-        {a, b, op, exp_r} = testvector [vectornum];
-    
+    always @(posedge clk) begin
+        $display ( " %d vectornum loading " , vectornum) ;
+        {op, a, b, exp_r} = testvector [vectornum];
+    end
     always @(negedge clk)
     begin
         if (~reset)
@@ -64,12 +70,12 @@ module alu_test();
                 errors = errors + 1;
             end
             vectornum = vectornum + 1;
-            if ( testvector [vectornum] === 3'bx)
+            
+            if ( testvector [vectornum] === 'bX)
             begin
                 $display ( " %d test completed with %d errors " , vectornum, errors ) ;
                 $finish ;
             end
         end
      end
-
 endmodule
