@@ -37,11 +37,11 @@ mov   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister
 sl    r4 imm4       01 10 111Q _III RRRR 
 sr    r4 imm4       01 10 110Q LIII RRRR    L if logical
 cmp   r4 r4         01 10 101Q RRRR RRRR    Compare 
-and   r4 r4         01 10 100Q RRRR RRRR 
-or    r4 r4         01 10 011Q RRRR RRRR 
+sub   r4 r4         01 10 100Q RRRR RRRR    
+add   r4 r4         01 10 011Q RRRR RRRR 
 xor   r4 r4         01 10 010Q RRRR RRRR    not (white)
-sub   r4 r4         01 10 001Q RRRR RRRR    
-add   r4 r4         01 10 000Q RRRR RRRR 
+or    r4 r4         01 10 001Q RRRR RRRR 
+and   r4 r4         01 10 000Q RRRR RRRR 
 
 setcc imm8          01 01 ___Q MMMM FFFF     
     ... clearcc

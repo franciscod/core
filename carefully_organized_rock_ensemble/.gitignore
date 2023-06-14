@@ -1,6 +1,9 @@
 *.cache/
 *.sim/
+*.runs/
+*.srcs/*/imports
 
-vivado.jou
-vivado.log
+
+vivado*.jou
+vivado*.log
 vivado_pid*

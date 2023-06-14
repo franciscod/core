@@ -21,9 +21,24 @@
 
 
 module alu(
-    input a,
-    input b,
-    input op,
-    output r
+    input  [2:0] op,          
+    input  [7:0] a,              
+    input  [7:0] b,             
+    input        shift_logical,  
+    input  [2:0] shift_imm,   
+      
+    output [7:0] r,           
+    output [3:0] flags         
     );
+ 
+    assign r = op == 'b000 ? a&b
+             : op == 'b001 ? a|b
+             : op == 'b010 ? a^b
+             : 'bz;
+
+    assign flags[0] = r == 'b0; // Z
+    assign flags[1] = 0; // V
+    assign flags[2] = r[7]; // N
+    assign flags[3] = 0; // C
+    
 endmodule
