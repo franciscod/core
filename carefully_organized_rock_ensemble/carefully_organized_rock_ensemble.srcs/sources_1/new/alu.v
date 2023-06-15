@@ -29,10 +29,14 @@ module alu(
       
     output [7:0] r,           
     output [3:0] flags         
-    );
+);
 
     wire [8:0] a_plus_b = a + b;
     wire [8:0] a_sub_b = a - b;
+    wire [7:0] shift_right = shift_logical
+        ? a >> shift_imm
+        : $signed($signed(a) >>> shift_imm);
+    wire [8:0] shift_left = a << shift_imm;
  
     assign r = op == 'b000 ? a&b
              : op == 'b001 ? a|b
@@ -40,11 +44,14 @@ module alu(
              : op == 'b011 ? a_plus_b[7:0]
              : op == 'b100 ? a_sub_b[7:0]
              : op == 'b101 ? a_sub_b[7:0]
+             : op == 'b110 ? shift_right
+             : op == 'b111 ? shift_left[7:0]
              : 'bz;
 
     wire c = op == 'b011 ? a_plus_b[8]
            : op == 'b100 ? a_sub_b[8]
            : op == 'b101 ? a_sub_b[8]
+           : op == 'b111 ? shift_left[8]
            : 0;
     wire n = r[7];
     wire v = op == 'b011 ? a[7] == b[7] && a[7] != r[7]
