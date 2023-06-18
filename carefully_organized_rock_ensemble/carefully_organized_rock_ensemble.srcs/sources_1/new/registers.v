@@ -62,11 +62,11 @@ module registers(
             end
             // Update flags unless a register was requested
             if (en_write_flags && !(en_write_reg && sel_write_reg == 8)) begin
-                bank[8] <= data_write_flags;
+                bank[8] <= { bank[8][7:4], data_write_flags };
             end
             // Update ip unless a register write was requested
             if (en_write_ip && !(en_write_reg && sel_write_reg == 9)) begin
-                bank[9] <= bank[9];
+                bank[9] <= data_write_ip;
             end
         end
         // Otherwise put the register bank in a well-known state
