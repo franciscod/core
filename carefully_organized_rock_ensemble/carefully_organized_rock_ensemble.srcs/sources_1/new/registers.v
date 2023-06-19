@@ -30,7 +30,7 @@ module registers(
     input  [3:0] sel_write_reg,
     input  [7:0] data_write_reg,
     input        en_write_flags,
-    input  [3:0] data_write_flags,
+    input  [7:0] data_write_flags,
     input        en_write_ip,
     input  [7:0] data_write_ip,
 
@@ -72,7 +72,7 @@ module registers(
             end
             // Update flags unless a register was requested
             if (en_write_flags && !eflags_write_requested) begin
-                bank[8] <= { bank[8][7:4], data_write_flags };
+                bank[8] <= data_write_flags;
             end
             // Update ip unless a register write was requested
             if (en_write_ip && !ip_write_requested) begin
