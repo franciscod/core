@@ -1,4 +1,5 @@
 *.cache/
+*.ip_user_files/mem_init_files/
 *.runs/
 *.sim/
 
