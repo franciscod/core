@@ -25,6 +25,7 @@ module registers(
     input        rst,
     input  [3:0] sel_read_a,
     input  [3:0] sel_read_b,
+    input        exchange_a_b,
     input        en_write_reg,
     input  [3:0] sel_write_reg,
     input  [7:0] data_write_reg,
@@ -53,6 +54,11 @@ module registers(
     assign r_cs    = bank[12];
     assign r_ds    = bank[13];
 
+    wire eflags_write_requested = (en_write_reg && sel_write_reg == 8)
+                               || (~en_write_reg && exchange_a_b && (sel_read_a == 8 || sel_read_b == 8));
+    wire ip_write_requested = (en_write_reg && sel_write_reg == 9)
+                           || (~en_write_reg && exchange_a_b && (sel_read_a == 9 || sel_read_b == 9));
+
     always @(negedge clk) begin
         // If no reset was requested just do normal operation
         if (rst == 0) begin
@@ -60,12 +66,16 @@ module registers(
             if (en_write_reg) begin
                 bank[sel_write_reg] <= data_write_reg;
             end
+            if (~en_write_reg && exchange_a_b) begin
+                bank[sel_read_a] <= r_read_b;
+                bank[sel_read_b] <= r_read_a;
+            end
             // Update flags unless a register was requested
-            if (en_write_flags && !(en_write_reg && sel_write_reg == 8)) begin
+            if (en_write_flags && !eflags_write_requested) begin
                 bank[8] <= { bank[8][7:4], data_write_flags };
             end
             // Update ip unless a register write was requested
-            if (en_write_ip && !(en_write_reg && sel_write_reg == 9)) begin
+            if (en_write_ip && !ip_write_requested) begin
                 bank[9] <= data_write_ip;
             end
         end
