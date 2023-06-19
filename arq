@@ -16,7 +16,7 @@ rc cs         code segment (need +1 bit -- 8 bit)
 rd ds         data segment (need +2 bit -- 8 bit)
 re lr         link register
 rf wh         white hole, always ff
-        
+
 
 call addr
     mov  lr addr
@@ -29,27 +29,26 @@ ip un valor
 registro un valor de ip
 
                                              AKA
-storei [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate
-loadi  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate
+storei [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate         no skipeable
+loadi  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate        no skipeable
+movi   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister                 no skipeable
 
-movi   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister
+sl     r4 imm4       01 10 111S _III RRRR                                skipeable
+sr     r4 imm4       01 10 110S LIII RRRR    L if logical                skipeable
+cmp    r4 r4         01 10 101S RRRR RRRR    Compare                     skipeable
+sub    r4 r4         01 10 100S RRRR RRRR                                skipeable
+add    r4 r4         01 10 011S RRRR RRRR                                skipeable
+xor    r4 r4         01 10 010S RRRR RRRR    not (white)                 skipeable
+or     r4 r4         01 10 001S RRRR RRRR                                skipeable
+and    r4 r4         01 10 000S RRRR RRRR                                skipeable
 
-sl     r4 imm4       01 10 111S _III RRRR 
-sr     r4 imm4       01 10 110S LIII RRRR    L if logical
-cmp    r4 r4         01 10 101S RRRR RRRR    Compare 
-sub    r4 r4         01 10 100S RRRR RRRR    
-add    r4 r4         01 10 011S RRRR RRRR 
-xor    r4 r4         01 10 010S RRRR RRRR    not (white)
-or     r4 r4         01 10 001S RRRR RRRR 
-and    r4 r4         01 10 000S RRRR RRRR 
-
-setcc  imm8          01 01 ___S MMMM FFFF     
+setcc  imm8          01 01 ___S MMMM FFFF                                skipeable
     ... clearcc
 
-storer [r4] r4       00 11 ___S RRRR RRRR    writeToMemIndirect
-loadr  r4 [r4]       00 10 ___S RRRR RRRR    readFromMemIndirect
-xchg   r4 r4         00 01 ___S RRRR RRRR    call
-movr   r4 r4         00 00 ___S RRRR RRRR    CopyRegister, return, nop
+storer [r4] r4       00 11 ___S RRRR RRRR    writeToMemIndirect          skipeable
+loadr  r4 [r4]       00 10 ___S RRRR RRRR    readFromMemIndirect         skipeable
+xchg   r4 r4         00 01 ___S RRRR RRRR    call                        skipeable
+movr   r4 r4         00 00 ___S RRRR RRRR    CopyRegister, return, nop   skipeable
 
 
 memoria:
