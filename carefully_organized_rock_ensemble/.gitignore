@@ -1,8 +1,6 @@
 *.cache/
-*.sim/
 *.runs/
-*.srcs/*/imports
-
+*.sim/
 
 vivado*.jou
 vivado*.log
