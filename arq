@@ -8,7 +8,7 @@ r6 f      general purpose
 r7 g      general purpose
 
                     76543210
-r8 fl         flags Q___CNVZ
+r8 fl         flags S___CNVZ       # skip, carry, negative, overflow, zero
 r9 ip rip pc  instruction pointer
 ra sp         stack pointer
 rb ??         ????
@@ -28,28 +28,28 @@ ret
 ip un valor
 registro un valor de ip
 
-                                            AKA
-store [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate
-load  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate
+                                             AKA
+storei [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate
+loadi  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate
 
-mov   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister
+movi   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister
 
-sl    r4 imm4       01 10 111Q _III RRRR 
-sr    r4 imm4       01 10 110Q LIII RRRR    L if logical
-cmp   r4 r4         01 10 101Q RRRR RRRR    Compare 
-sub   r4 r4         01 10 100Q RRRR RRRR    
-add   r4 r4         01 10 011Q RRRR RRRR 
-xor   r4 r4         01 10 010Q RRRR RRRR    not (white)
-or    r4 r4         01 10 001Q RRRR RRRR 
-and   r4 r4         01 10 000Q RRRR RRRR 
+sl     r4 imm4       01 10 111S _III RRRR 
+sr     r4 imm4       01 10 110S LIII RRRR    L if logical
+cmp    r4 r4         01 10 101S RRRR RRRR    Compare 
+sub    r4 r4         01 10 100S RRRR RRRR    
+add    r4 r4         01 10 011S RRRR RRRR 
+xor    r4 r4         01 10 010S RRRR RRRR    not (white)
+or     r4 r4         01 10 001S RRRR RRRR 
+and    r4 r4         01 10 000S RRRR RRRR 
 
-setcc imm8          01 01 ___Q MMMM FFFF     
+setcc  imm8          01 01 ___S MMMM FFFF     
     ... clearcc
 
-store [r4] r4       00 11 ___C RRRR RRRR    writeToMemIndirect
-load  r4 [r4]       00 10 ___C RRRR RRRR    readFromMemIndirect
-xchg  r4 r4         00 01 ___C RRRR RRRR    call
-mov   r4 r4         00 00 ___C RRRR RRRR    CopyRegister, return, nop
+storer [r4] r4       00 11 ___S RRRR RRRR    writeToMemIndirect
+loadr  r4 [r4]       00 10 ___S RRRR RRRR    readFromMemIndirect
+xchg   r4 r4         00 01 ___S RRRR RRRR    call
+movr   r4 r4         00 00 ___S RRRR RRRR    CopyRegister, return, nop
 
 
 memoria:
