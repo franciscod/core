@@ -110,14 +110,14 @@ module core(
         .flags(alu_flags)
     );
     
-    assign addr = doing_store ? (doing_store_imm ? addr_imm : ((ds << 2) + reg_a))
+    assign addr = doing_store ? (doing_store_imm ? addr_imm : ((ds << 2) + reg_b))
                 : doing_load  ? (doing_load_imm  ? addr_imm : ((ds << 2) + reg_b))
-                : 'bX;
+                : 10'bX;
     
     assign mem_en_store = doing_store;
     assign mem_en_load  = doing_load;
     assign mem_addr = addr;
-    assign mem_store = reg_b;
+    assign mem_store = reg_a;
     assign mem_load = mem_out;
     
     
@@ -125,11 +125,11 @@ module core(
                      : doing_movi ? imm
                      : doing_load ? mem_out
                      : doing_alu  ? alu_out
-                     : 'bX;
+                     : 8'bX;
 
     assign flags_arg = doing_alu   ? { flags[7:4],  alu_flags}
                      : doing_setcc ? 8'b11111111 // TODO
-                     : 'bX;
+                     : 8'bX;
                      
     wire [7:0] ip;
     assign instruction_addr = (cs << 2) + ip;
