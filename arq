@@ -28,27 +28,30 @@ ret
 ip un valor
 registro un valor de ip
 
-                                             AKA
-storei [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate         no skipeable
-loadi  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate        no skipeable
-movi   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister                 no skipeable
+                                REGB REGA
+                                             AKA                                         escribe reg?
+storei [imm10] r4    11 AA AAAA AAAA RRRR    writeToMemImmediate         no skipeable    0
+loadi  r4 [imm10]    10 AA AAAA AAAA RRRR    readFromMemImmediate        no skipeable    1
+movi   r4 imm8       01 11 DDDD DDDD RRRR    SetRegister                 no skipeable    1
 
-sl     r4 imm4       01 10 111S _III RRRR                                skipeable
-sr     r4 imm4       01 10 110S LIII RRRR    L if logical                skipeable
-cmp    r4 r4         01 10 101S RRRR RRRR    Compare                     skipeable
-sub    r4 r4         01 10 100S RRRR RRRR                                skipeable
-add    r4 r4         01 10 011S RRRR RRRR                                skipeable
-xor    r4 r4         01 10 010S RRRR RRRR    not (white)                 skipeable
-or     r4 r4         01 10 001S RRRR RRRR                                skipeable
-and    r4 r4         01 10 000S RRRR RRRR                                skipeable
+sl     r4 imm4       01 10 111S _III RRRR                                skipeable       1
+sr     r4 imm4       01 10 110S LIII RRRR    L if logical                skipeable       1
+cmp    r4 r4         01 10 101S RRRR RRRR    Compare                     skipeable       1
+sub    r4 r4         01 10 100S RRRR RRRR                                skipeable       1
+add    r4 r4         01 10 011S RRRR RRRR                                skipeable       1
+xor    r4 r4         01 10 010S RRRR RRRR    not (white)                 skipeable       1
+or     r4 r4         01 10 001S RRRR RRRR                                skipeable       1
+and    r4 r4         01 10 000S RRRR RRRR                                skipeable       1
 
-setcc  imm8          01 01 ___S MMMM FFFF                                skipeable
+setcc  imm8          01 01 ___S MMMM FFFF                                skipeable       0
     ... clearcc
 
-storer [r4] r4       00 11 ___S RRRR RRRR    writeToMemIndirect          skipeable
-loadr  r4 [r4]       00 10 ___S RRRR RRRR    readFromMemIndirect         skipeable
-xchg   r4 r4         00 01 ___S RRRR RRRR    call                        skipeable
-movr   r4 r4         00 00 ___S RRRR RRRR    CopyRegister, return, nop   skipeable
+WTF                  01 00 ???? ???? ????    XD
+
+storer [r4] r4       00 11 ___S RRRR RRRR    writeToMemIndirect          skipeable       0
+loadr  r4 [r4]       00 10 ___S RRRR RRRR    readFromMemIndirect         skipeable       1
+xchg   r4 r4         00 01 ___S RRRR RRRR    call                        skipeable       0
+movr   r4 r4         00 00 ___S RRRR RRRR    CopyRegister, return, nop   skipeable       1
 
 
 memoria:
