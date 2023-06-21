@@ -107,7 +107,7 @@ module core_test();
             end
             
             if (fail) begin
-                $display("Error: fijate arriba crack");
+                $display("Error: instruction = %b, addr = %b", instruction, exp_ip);
                 errors = errors + 1;
             end
             vectornum = vectornum + 1;

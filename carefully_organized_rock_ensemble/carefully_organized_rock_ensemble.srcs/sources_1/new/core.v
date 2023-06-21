@@ -49,7 +49,6 @@ module core(
 
     wire [7:0] reg_a;
     wire [7:0] reg_b;
-    wire [7:0] mem_out;
     wire [7:0] alu_out;
 
     wire [3:0] alu_flags;
@@ -117,13 +116,12 @@ module core(
     assign mem_en_store = doing_store;
     assign mem_en_load  = doing_load;
     assign mem_addr = addr;
-    assign mem_store = reg_a;
-    assign mem_load = mem_out;
+    assign mem_store = reg_a;;
     
     
     assign write_arg = doing_movr ? reg_b
                      : doing_movi ? imm
-                     : doing_load ? mem_out
+                     : doing_load ? mem_load
                      : doing_alu  ? alu_out
                      : 8'bX;
 
