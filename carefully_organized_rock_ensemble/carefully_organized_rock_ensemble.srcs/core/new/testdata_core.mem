@@ -60,4 +60,14 @@ rst ip        instruction      w  r  addr       data_in  data_out   testnum
 0___001010101_1111111111110010_1__0__1111111111_XXXXXXXX_00100011 // 55 storei [0x3FF] r2      (assert xchg source and destination)
 0___001010110_0000000000101001_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 56 storer r9      r2
 1___000100011_0000000000000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 24 NOP, RESET             (assert movr destination)
-// TODO: Test S bit
+
+// Test skip bit
+0___000000000_0011000100000000_1__0__0000000000_XXXXXXXX_00000000 // 00 storer [r0]    r0      skippable (does not get skipped)
+0___000000001_0111100000001000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 01 movi   r8      0x80    (set skip bit)
+0___000000010_0011000100000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 02 storer [r0]    r0      skippable (gets skipped)
+0___000000011_0110011000000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 03 add    r0      r0      modifies non-S flags
+0___000000100_0011000000001000_1__0__0000000000_XXXXXXXX_10000001 // 04 storer [r0]    r8      (assert flags)
+0___000000101_0011000100000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 05 storer [r0]    r0      skippable (gets skipped)
+0___000000110_0111000000001000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 06 movi   r8      0x80    (unset skip bit)
+0___000000111_0011000100000000_1__0__0000000000_XXXXXXXX_00000000 // 07 storer [r0]    r0      skippable (does not get skipped)
+1___000001000_0000000000000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 24 NOP, RESET
