@@ -55,7 +55,8 @@ module core(
 
     wire [7:0] flags;
     wire       skip = flags[7];
-    
+    wire       setcc_s;
+
     wire [7:0] cs;
     wire [7:0] ds;
     
@@ -108,6 +109,16 @@ module core(
         .r(alu_out),
         .flags(alu_flags)
     );
+
+    setcc_logic setcc_logic(
+      .previous_s(skip),
+      .op(subop_code),
+      .mask(setcc_mask),
+      .expected_flags(setcc_expected),
+      .current_flags(flags[3:0]),
+
+      .s(setcc_s)
+    );
     
     assign addr = doing_store ? (doing_store_imm ? addr_imm : ((ds << 2) + reg_b))
                 : doing_load  ? (doing_load_imm  ? addr_imm : ((ds << 2) + reg_b))
@@ -116,7 +127,7 @@ module core(
     assign mem_en_store = doing_store;
     assign mem_en_load  = doing_load;
     assign mem_addr = addr;
-    assign mem_store = reg_a;;
+    assign mem_store = reg_a;
     
     
     assign write_arg = doing_movr ? reg_b
@@ -125,8 +136,8 @@ module core(
                      : doing_alu  ? alu_out
                      : 8'bX;
 
-    assign flags_arg = doing_alu   ? { flags[7:4],  alu_flags}
-                     : doing_setcc ? 8'b11111111 // TODO
+    assign flags_arg = doing_alu   ? { flags[7:4],  alu_flags }
+                     : doing_setcc ? { setcc_s,  flags[6:0] }
                      : 8'bX;
                      
     wire [7:0] ip;

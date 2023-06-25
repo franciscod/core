@@ -43,8 +43,11 @@ xor    r4a r4b       01 10 010S RRRR RRRR    not (white)                 skipeab
 or     r4a r4b       01 10 001S RRRR RRRR                                skipeable       1
 and    r4a r4b       01 10 000S RRRR RRRR                                skipeable       1
 
-setcc  imm8          01 01 ___S MMMM FFFF                                skipeable       0
-    ... clearcc
+setcc  imm8          01 01 OOOS MMMM FFFF                                skipeable       0
+                           |||
+                           ||S if neither flags check nor previous bit are set
+                           |S if either
+                           S if both
 
 WTF                  01 00 ???? ???? ????    XD
 
