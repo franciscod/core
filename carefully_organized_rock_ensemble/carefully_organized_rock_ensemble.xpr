@@ -4,7 +4,7 @@
 <!-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.                   -->
 <!-- Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.   -->
 
-<Project Product="Vivado" Version="7" Minor="63" Path="D:/core/carefully_organized_rock_ensemble/carefully_organized_rock_ensemble.xpr">
+<Project Product="Vivado" Version="7" Minor="63" Path="/home/fd/mat/fpga/core/carefully_organized_rock_ensemble/carefully_organized_rock_ensemble.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="dedbe23337d34bbea78cbfa9fdd9e3dc"/>
@@ -45,7 +45,7 @@
     <Option Name="SimulatorGccVersionActiveHdl" Val="9.3.0"/>
     <Option Name="BoardPart" Val=""/>
     <Option Name="SourceMgmtMode" Val="DisplayOnly"/>
-    <Option Name="ActiveSimSet" Val="setcc"/>
+    <Option Name="ActiveSimSet" Val="core"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="ProjectType" Val="Default"/>
     <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
@@ -60,7 +60,7 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="zybo-z7-20"/>
-    <Option Name="WTXSimLaunchSim" Val="294"/>
+    <Option Name="WTXSimLaunchSim" Val="298"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -430,11 +430,14 @@
     <Simulator Name="Questa">
       <Option Name="Description" Val="Questa Advanced Simulator"/>
     </Simulator>
+    <Simulator Name="Xcelium">
+      <Option Name="Description" Val="Xcelium Parallel Simulator"/>
+    </Simulator>
+    <Simulator Name="VCS">
+      <Option Name="Description" Val="Verilog Compiler Simulator (VCS)"/>
+    </Simulator>
     <Simulator Name="Riviera">
       <Option Name="Description" Val="Riviera-PRO Simulator"/>
-    </Simulator>
-    <Simulator Name="ActiveHDL">
-      <Option Name="Description" Val="Active-HDL Simulator"/>
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="20">

@@ -50,7 +50,7 @@ rst ip        instruction      w  r  addr       data_in  data_out   testnum
 0___000011010_0110001011110010_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 1A or     r2      rf
 0___000011011_1111111111110010_1__0__1111111111_XXXXXXXX_11111111 // 1B storei [0x3FF] r2      (assert or destination)
 0___000011100_1111111111111000_1__0__1111111111_XXXXXXXX_00000100 // 1C storei [0x3FF] r8      (assert or flags)
-0___000011101_0110000010000010_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 1D and     r2      r8
+0___000011101_0110000010000010_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 1D and    r2      r8
 0___000011110_1111111111110010_1__0__1111111111_XXXXXXXX_00000100 // 1E storei [0x3FF] r2      (assert and destination)
 0___000011111_1111111111111000_1__0__1111111111_XXXXXXXX_00000000 // 1F storei [0x3FF] r8      (assert and flags)
 0___000100000_0011000010010010_1__0__0000100000_XXXXXXXX_00000100 // 20 storer [r9]    r2
@@ -71,3 +71,11 @@ rst ip        instruction      w  r  addr       data_in  data_out   testnum
 0___000000110_0111000000001000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 06 movi   r8      0x00    (unset skip bit)
 0___000000111_0011000100000000_1__0__0000000000_XXXXXXXX_00000000 // 07 storer [r0]    r0      skippable (does not get skipped)
 1___000001000_0000000000000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX // 08 NOP, RESET
+
+/*
+rst ip        instruction      w  r  addr       data_in  data_out   testnum */
+1___XXXXXXXXX_XXXXXXXXXXXXXXXX_X__X__XXXXXXXXXX_XXXXXXXX_XXXXXXXX //  R reset
+0___000000000_0111000000010001_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX //  0 movi r1 0x 01
+0___000000001_0110011000011001_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX //  1 add  ip r1 /// ADD IP 1 == NOP
+0___000000010_0000000000000000_0__0__XXXXXXXXXX_XXXXXXXX_XXXXXXXX //  2 (assert ip was incremented (without natural advance)
+0___000000011_1111111111111001_1__0__1111111111_XXXXXXXX_00000011 //  3 storei [0x3FF] ip      (assert storing current ip)
