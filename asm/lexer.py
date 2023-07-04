@@ -58,12 +58,32 @@ TOKENS_PARSE = [
     (r"0b([0-1]+)",                  lambda m: int(m,  2)),
     (r"(\d+)",                       lambda m: int(m, 10)),
 
-    # LABELS
-    (r"([a-zA-Z-_][0-9a-zA-Z-_]+):", lambda m: (':', m)),
+    # LABEL DEFS
+    (r"([a-zA-Z-_][0-9a-zA-Z-_]+):", lambda m: ('labeldef', m)),
 
     # SETCC SHENANIGANS
     (r"([cC]?[nN]?[vV]?[zZ]?)",      lambda m: {c.lower(): c == c.upper() for c in m}),
+
+    # LABEL NAMES
+    (r"([a-zA-Z-_][0-9a-zA-Z-_]+)", lambda m: ('labelname', m)),
+
 ]
+
+def canon(token):
+    match token:
+        case int(n): 
+            return hex(n)
+        case ('labeldef', label): 
+            return f"{label}:"
+        case ('labelname', label): 
+            return label
+        case str(text):
+            if text in TOKENS_TEXT:
+                return text
+            raise ValueError(text)
+        case _:
+            raise NotImplementedError(token)
+
 
 def lex_text(part, toks):
     candidate_token = part.lower()
@@ -87,13 +107,21 @@ def lex_line(line):
             continue
         if lex_parse(part, toks):
             continue
-        # TODO: error bad token
+
+        # TODO: better error for bad token?
+        raise ValueError(part)
 
     return toks
 
 def lex(source):
     for line in source.split('\n'):
+        # comma is whitespace
         line = line.strip().replace(',', ' ')
+        # split token on brackets
+        line = line.strip().replace('[', ' [ ')
+        line = line.strip().replace(']', ' ] ')
+        # bye comments
+        line = line.partition('#')[0]
         toks = lex_line(line)
 
         if not toks:
@@ -114,3 +142,7 @@ setcc and CvZ
     for toks in lex(TEST_CODE):
         print(toks)
 
+    print(canon(('labeldef', 'jorge')))
+
+    # not yet implemented
+    # print(canon({'c': True}))

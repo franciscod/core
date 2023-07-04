@@ -30,7 +30,7 @@ module core(
     output        mem_en_store,
     output        mem_en_load,
     output [7:0]  mem_store,
-    output [9:0]  mem_addr,
+    output [9:0]  mem_addr,  // para load y para store
     output [8:0]  instruction_addr
     );
         
