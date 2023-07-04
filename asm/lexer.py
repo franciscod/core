@@ -91,6 +91,7 @@ def lex_text(part, toks):
         toks.append(candidate_token)
         return True
 
+
 def lex_parse(part, toks):
     for pattern, action in TOKENS_PARSE:
         m = re.fullmatch(pattern, part)
@@ -99,6 +100,7 @@ def lex_parse(part, toks):
         group = m[1]
         toks.append(action(group))
         return True
+
 
 def lex_line(line):
     toks = []

@@ -63,12 +63,12 @@ def assemble(toklines):
     for i, bits, line in words:
         pre = " " * 4
         if bits is None:
-            sbits = "#" * 16
+            sbits = "/" * 16
             pre = ""
         else:
             sbits = f"{bits:016b}"
 
-        print(f" {i:03x}:  {sbits}  # {pre} {' '.join(canon(t) for t in line)}")
+        print(f"  {sbits}  // {i:03x} {pre} {' '.join(canon(t) for t in line)}")
 
 if __name__ == "__main__":
     FIB = """
