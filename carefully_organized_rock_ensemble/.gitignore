@@ -2,6 +2,7 @@
 *.ip_user_files/mem_init_files/
 *.runs/
 *.sim/
+.Xil/
 
 vivado*.jou
 vivado*.log

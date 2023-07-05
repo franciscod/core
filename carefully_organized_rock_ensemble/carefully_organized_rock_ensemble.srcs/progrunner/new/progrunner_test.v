@@ -23,7 +23,7 @@
 module progrunner_test(
 
     );
-        reg         clk;
+    reg         clk;
     reg         rst;
     
     reg  [15:0] instruction;
