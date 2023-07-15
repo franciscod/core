@@ -35,7 +35,7 @@ module mem(
     
     reg [7:0] words [0:1023];
     
-    assign data_load = en_load ? words[addr_load] : 'bz;
+    assign data_load = en_load && addr_load < 'b1111111110 ? words[addr_load] : 'bz;
 
     
     always @(negedge clk) begin        
