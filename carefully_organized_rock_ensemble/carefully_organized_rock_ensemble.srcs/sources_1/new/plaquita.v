@@ -25,8 +25,7 @@ module plaquita(
     input [3:0] sw,
     input [3:0] btn,
     output [3:0] led
-    );
-
+);
     // TODO: hacer que convivan dut_alu y dut_core, y que sw[3] cambie entre uno y otro los sw/btn/led con muxes
 
     // TODO: encontrar alguna forma de que se pueda single steppear el core (ahora esta con el clock del sistema)
@@ -58,6 +57,12 @@ module plaquita(
     wire [ 7:0] data_out;
     wire [ 9:0] addr;
     wire [ 8:0] ip;
+
+    wire [ 7:0] io_in;
+    wire [ 7:0] io_out;
+
+    assign io_in = sw & btn;
+    assign io_out[3:0] = led;
  
     core dut(
         .clk(clk),
@@ -69,7 +74,10 @@ module plaquita(
         .mem_en_load(en_load),
         .mem_store(data_out),
         .mem_addr(addr),
-        .instruction_addr(ip)
+        .instruction_addr(ip),
+
+        .io_input(io_in),
+        .io_output(io_out)
     );
     
     assign led[3:0] = data_out[3:0];

@@ -33,6 +33,9 @@ module core_test();
     wire [ 7:0] data_out;
     wire [ 9:0] addr;
     wire [ 8:0] ip;
+
+    wire [ 7:0] io_input;
+    wire [ 7:0] io_output;
     
     reg         exp_en_store;
     reg         exp_en_load;
@@ -50,7 +53,10 @@ module core_test();
         .mem_en_load(en_load),
         .mem_store(data_out),
         .mem_addr(addr),
-        .instruction_addr(ip)
+        .instruction_addr(ip),
+
+        .io_input(io_input),
+        .io_output(io_output)
     );
     
     reg [31:0] vectornum, errors, initialized, fail;

@@ -31,7 +31,10 @@ module core(
     output        mem_en_load,
     output [7:0]  mem_store,
     output [9:0]  mem_addr,  // para load y para store
-    output [8:0]  instruction_addr
+    output [8:0]  instruction_addr,
+
+    input  [7:0]  io_input,
+    output [7:0]  io_output
 );
     wire [3:0] op_code;     // TODO: control
     wire [2:0] subop_code;  // TODO: setcc
@@ -78,7 +81,6 @@ module core(
 
     wire [7:0] write_arg;
     wire [7:0] flags_arg;
-
     
     ir ir(
         .data(instruction),
@@ -115,16 +117,28 @@ module core(
 
       .s(setcc_s)
     );
-    
+
+
+    io io(
+        .clk(clk),
+        .en_store(doing_store),
+        .addr_store(addr),
+        .data_store(reg_a),
+        .en_load(doing_load),
+        .addr_load(addr),
+        .data_load(mem_load),
+        .io_input(io_input),
+        .io_output(io_output),
+        .mem_en_load(mem_en_load),
+        .mem_en_store(mem_en_store)
+    );
+
     assign addr = doing_store ? (doing_store_imm ? addr_imm : ((ds << 2) + reg_b))
                 : doing_load  ? (doing_load_imm  ? addr_imm : ((ds << 2) + reg_b))
                 : 10'bX;
-    
-    assign mem_en_store = doing_store;
-    assign mem_en_load  = doing_load;
+
     assign mem_addr = addr;
     assign mem_store = reg_a;
-
 
     assign write_arg = doing_movr ? reg_b
                      : doing_movi ? imm
