@@ -1,0 +1,3 @@
+calli(0x123)
+calli(0x321)
+ret
