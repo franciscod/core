@@ -40,11 +40,9 @@ module io(
     reg [7:0] load_register;
     reg [7:0] store_register;
 
-    assign data_load = en_load ? (
-        addr_load == 'b1111111110 ? load_register :
-        addr_load == 'b1111111111 ? store_register
-                                  : 'bz
-    ) : 'bz;
+    assign data_load = en_load && addr_load == 'b1111111110 ? load_register
+                     : en_load && addr_load == 'b1111111111 ? store_register
+                     : 'bz;
     assign io_output = store_register;
     assign mem_en_load = en_load && addr_load < 'b1111111110;
     assign mem_en_store = en_store && addr_store < 'b1111111110;
