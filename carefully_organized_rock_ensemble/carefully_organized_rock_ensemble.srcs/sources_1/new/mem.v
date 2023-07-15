@@ -22,7 +22,7 @@
 
 module mem(
     input        clk,
-    
+
     input        en_store,
     input  [9:0] addr_store,
     input  [7:0] data_store,
@@ -30,21 +30,15 @@ module mem(
     input        en_load,
     input  [9:0] addr_load,
     output [7:0] data_load
-    
-    );
-    
+);
     reg [7:0] words [0:1023];
-    
-    assign data_load = en_load && addr_load < 'b1111111110 ? words[addr_load] : 'bz;
 
-    
+    assign data_load = en_load ? words[addr_load] : 'bz;
+
     always @(negedge clk) begin        
         // Store word as requested
         if (en_store) begin
             words[addr_store] <= data_store;
         end
-        
-        // TODO: io ports
     end
-    
 endmodule
