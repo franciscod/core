@@ -116,12 +116,17 @@ def lex_line(line):
     return toks
 
 def lex(source):
-    for line in source.split('\n'):
+    source = (
+        source
+        # semicolon is a line delimiter
+        .replace(';', '\n')
         # comma is whitespace
-        line = line.strip().replace(',', ' ')
+        .replace(',', ' ')
         # split token on brackets
-        line = line.strip().replace('[', ' [ ')
-        line = line.strip().replace(']', ' ] ')
+        .replace('[', ' [ ')
+        .replace(']', ' ] ')
+    )
+    for line in source.split('\n'):
         # bye comments
         line = line.partition('#')[0]
         toks = lex_line(line)

@@ -71,15 +71,6 @@ def assemble(toklines):
         print(f"  {sbits}  // {i:03x} {pre} {' '.join(canon(t) for t in line)}")
 
 if __name__ == "__main__":
-    FIB = """
-        movi r1, 0
-        MoVi r2, 1
-
-    loop:
-        storer [r0], r1
-           add  r1,  r2
-          xchg  r1,  r2 
-          movi  r9,  loop # pc
-"""
-
-    assemble(lex(FIB))
+    from sys import stdin
+    program = stdin.read()
+    assemble(lex(program))
