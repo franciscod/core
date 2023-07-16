@@ -90,7 +90,7 @@ module progrunner_test();
     always #5 clk = ~clk;
 
     initial begin
-        $readmemb("fib_code.mem", code_vector);
+        $readmemb("xorshift_code.mem", code_vector);
         $readmemb("no_io_signals", io_in_vector);
         clk = 0;
         rst = 1;

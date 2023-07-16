@@ -19,19 +19,34 @@
 #define wh     rf
 
 // Numeric aliases
-#define r10    ra
-#define r11    rb
-#define r12    rc
-#define r13    rd
-#define r14    re
-#define r15    rf
+#define r10 ra
+#define r11 rb
+#define r12 rc
+#define r13 rd
+#define r14 re
+#define r15 rf
 
 // Pseudo instructions
-#define calli(addr) \
-    movi lr addr;   \
-    xchg lr ip
-#define callr(reg) \
-    movr lr reg;   \
-    xchg lr ip
-#define ret        \
-    movr ip lr
+#define calli(addr)   \
+	movi lr addr; \
+	xchg lr ip
+#define callr(reg)    \
+	movr lr reg;  \
+	xchg lr ip
+
+#define ret           \
+	movr ip lr
+
+#define jmpi(addr)    \
+	movi ip addr
+#define jmpr(reg)     \
+	movr ip reg
+
+#define push(reg)     \
+	storer sp reg \
+	movr juanca 1 \
+	sub sp juanca
+#define pop(reg)      \
+	movr juanca 1 \
+	add sp juanca \
+	loadr reg sp

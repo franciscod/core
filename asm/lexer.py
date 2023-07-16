@@ -6,7 +6,8 @@ TOKENS_TEXT = {
     "loadi",
     "movi",
     "sl",
-    "sr",
+    "srl",
+    "sra",
     "cmp",
     "sub",
     "add",
@@ -50,6 +51,9 @@ TOKENS_TEXT = {
     "xnor",
     "or",
     "one",
+
+    # CONDITIONALS
+    "maybe",
 }
 
 TOKENS_PARSE = [
@@ -81,6 +85,8 @@ def canon(token):
             if text in TOKENS_TEXT:
                 return text
             raise ValueError(text)
+        case dict(cond):
+            return ''.join(k.upper() if v else k for k, v in cond.items())
         case _:
             raise NotImplementedError(token)
 
