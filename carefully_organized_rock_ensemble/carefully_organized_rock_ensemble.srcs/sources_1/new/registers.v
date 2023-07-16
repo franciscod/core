@@ -44,9 +44,11 @@ module registers(
     reg [7:0] bank [0:15];
 
     assign r_read_a = sel_read_a ==  0 ? 'b0000_0000
+                    : sel_read_a ==  9 ? bank[9] + 1
                     : sel_read_a == 15 ? 'b1111_1111
                     : bank[sel_read_a];
     assign r_read_b = sel_read_b ==  0 ? 'b0000_0000
+                    : sel_read_b ==  9 ? bank[9] + 1
                     : sel_read_b == 15 ? 'b1111_1111
                     : bank[sel_read_b];
     assign r_flags = bank[ 8];

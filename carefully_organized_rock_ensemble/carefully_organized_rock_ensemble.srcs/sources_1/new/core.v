@@ -44,8 +44,8 @@ module core(
     wire [3:0] sel_rb;
     wire       shift_logical;
     wire [2:0] shift_imm;
-    wire       setcc_mask;
-    wire       setcc_expected;
+    wire [3:0] setcc_mask;
+    wire [3:0] setcc_expected;
 
     wire [7:0] reg_a;
     wire [7:0] reg_b;

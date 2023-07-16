@@ -32,8 +32,8 @@ module ir(
     output [3:0] sel_rb,
     output       shift_logical,
     output [2:0] shift_imm,
-    output       setcc_mask,
-    output       setcc_expected
+    output [3:0] setcc_mask,
+    output [3:0] setcc_expected
 );
     wire skipeable_bit = data[8];
     wire skipped = !data[15] && data[14:12] != 3'b111 && skipeable_bit && skip;

@@ -90,6 +90,7 @@ module progrunner_test();
     always #5 clk = ~clk;
 
     initial begin
+        //$readmemb("fib_code.mem", code_vector);
         $readmemb("xorshift_code.mem", code_vector);
         $readmemb("no_io_signals", io_in_vector);
         clk = 0;
@@ -118,13 +119,13 @@ module progrunner_test();
             prev_io_output <= io_output;
 
             if (DEBUG_LOAD && en_store === 1'b1) begin
-                $display("[%8x:store] mem[%x] <- 0b%b == %d", clock_count, addr, data_out, data_out);
+                $display("[%8x:%x:stor] mem[%x] <- 0b%b == %d", clock_count, ip, addr, data_out, data_out);
             end
             if (DEBUG_STORE && en_load === 1'b1) begin
-                $display("[%8x:load] mem[%x] -> 0b%b == %d", clock_count, addr, data_in, data_in);
+                $display("[%8x:%x:load] mem[%x] -> 0b%b == %d", clock_count, ip, addr, data_in, data_in);
             end
             if (DEBUG_IO_OUT && prev_io_output != io_output) begin
-                $display("[%8x:iout] changed -> 0b%b == %d", clock_count, io_output, io_output);
+                $display("[%8x:%x:iout] changed  -> 0b%b == %d", clock_count, ip, io_output, io_output);
             end
         end
     end

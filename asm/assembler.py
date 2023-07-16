@@ -80,7 +80,7 @@ def asm_ins(line, labels, is_conditional):
         case 'storei', '[', imm10, ']', r4a:
             return asm_store(imm10, r4a)
         case 'loadi', r4a, '[', imm10, ']':
-            return asm_store(imm10, r4a)
+            return asm_load(imm10, r4a)
 
         case 'movi', r4a, imm8: 
             return asm_r4_imm8(0b0111, r4a, imm8, labels=labels)
