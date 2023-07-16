@@ -14,12 +14,12 @@ loop:
 	calli(xorshift_next)
 
 	calli(io_write)
-	movi a 0x10
+	movi a 0xFF
 	calli(sleep)
 
 	movr a b
 	calli(io_write)
-	movi a 0x10
+	movi a 0xFF
 	calli(sleep)
 
 	jmpi(loop)
@@ -30,10 +30,10 @@ io_write:
 
 sleep:
 	movi juanca 1
-	setcc zero
+	setcc one
 sleep_loop:
 	sub a juanca
-	setcc or Z
+	setcc and z
 	maybe add ip juanca // Skip next instruction
 	jmpi(sleep_loop)
 	ret

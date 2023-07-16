@@ -1,7 +1,7 @@
 CPP=cpp
 CPPFLAGS=-nostdinc -P -include prelude.asm.h
 
-all: fib.bin
+all: fib.bin random.bin random-with-sleep.bin
 
 clean:
 	rm -rf __pycache__ *.bin *.unmacroed.asm
