@@ -72,17 +72,15 @@ module progrunner_test();
     reg [15:0] code_vector [0:1000];
     reg [39:0] io_in_vector [0:1000];
     reg [31:0] io_in_next_change = 0;
-    reg [ 7:0] io_in_next_value = 0;
     reg [31:0] io_in_idx = 0;
     reg [ 7:0] prev_io_output = 0;
     always @(posedge clk) begin
         if (io_in_next_change == 0) begin
-            io_in_next_change <= io_in_vector[io_in_idx][39:8] + clock_count;
-            io_in_next_value <= io_in_vector[io_in_idx][7:0];
+            io_in_next_change <= io_in_vector[io_in_idx][39:8] - 1;
+            io_input = io_in_vector[io_in_idx][7:0];
             io_in_idx <= io_in_idx + 1;
-            io_input <= io_in_next_value;
             if (DEBUG_IO_IN) begin
-                $display("[%8x:ioin] changed -> 0b%b == %d", clock_count, io_in_next_value, io_in_next_value);
+                $display("[%8x:ioin] changed -> 0b%b == %d", clock_count, io_input, io_input);
             end
         end
         else begin
