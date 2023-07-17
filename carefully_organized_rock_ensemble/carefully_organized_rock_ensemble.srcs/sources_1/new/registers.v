@@ -43,14 +43,32 @@ module registers(
 );
     reg [7:0] bank [0:15];
 
-    assign r_read_a = sel_read_a ==  0 ? 'b0000_0000
-                    : sel_read_a ==  9 ? bank[9] + 1
-                    : sel_read_a == 15 ? 'b1111_1111
-                    : bank[sel_read_a];
-    assign r_read_b = sel_read_b ==  0 ? 'b0000_0000
-                    : sel_read_b ==  9 ? bank[9] + 1
-                    : sel_read_b == 15 ? 'b1111_1111
-                    : bank[sel_read_b];
+    assign r_read_a = read_reg(sel_read_a);
+    assign r_read_b = read_reg(sel_read_b);
+
+    function automatic [7:0] read_reg(input [3:0] sel);
+    begin
+        case (sel)
+            4'b0000: read_reg = 'b0000_0000;
+            4'b0001: read_reg = bank[1];
+            4'b0010: read_reg = bank[2];
+            4'b0011: read_reg = bank[3];
+            4'b0100: read_reg = bank[4];
+            4'b0101: read_reg = bank[5];
+            4'b0110: read_reg = bank[6];
+            4'b0111: read_reg = bank[7];
+            4'b1000: read_reg = bank[8];
+            4'b1001: read_reg = bank[9] + 1;
+            4'b1010: read_reg = bank[10];
+            4'b1011: read_reg = bank[11];
+            4'b1100: read_reg = bank[13];
+            4'b1101: read_reg = bank[13];
+            4'b1110: read_reg = bank[14];
+            4'b1111: read_reg = 'b1111_1111;
+        endcase
+    end
+    endfunction
+
     assign r_flags = bank[ 8];
     assign r_ip    = bank[ 9];
     assign r_cs    = bank[12];

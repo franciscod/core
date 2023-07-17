@@ -151,7 +151,12 @@ module core(
                      : 8'bZ;
 
     wire [7:0] ip;
-    assign instruction_addr = (cs << 2) + ip;
+    reg [8:0] instruction_addr_reg;
+    always @(posedge clk) begin
+        instruction_addr_reg <= (cs << 2) + ip;
+    end
+    //assign instruction_addr = (cs << 2) + ip;
+    assign instruction_addr = instruction_addr_reg;
 
     registers registers(
         .clk(clk),
