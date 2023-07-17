@@ -135,20 +135,22 @@ module core(
 
     assign addr = doing_store ? (doing_store_imm ? addr_imm : ((ds << 2) + reg_b))
                 : doing_load  ? (doing_load_imm  ? addr_imm : ((ds << 2) + reg_b))
-                : 10'bX;
+                : 10'bZ;
 
-    assign mem_addr = addr;
+    assign mem_addr = mem_en_load || mem_en_store
+                    ? addr
+                    : 10'bZ;
     assign mem_store = reg_a;
 
     assign write_arg = doing_movr ? reg_b
                      : doing_movi ? imm
                      : doing_load ? mem_load
                      : doing_alu  ? alu_out
-                     : 8'bX;
+                     : 8'bZ;
 
     assign flags_arg = doing_alu   ? { flags[7:4],  alu_flags }
                      : doing_setcc ? { setcc_s,  flags[6:0] }
-                     : 8'bX;
+                     : 8'bZ;
 
     wire [7:0] ip;
     assign instruction_addr = (cs << 2) + ip;

@@ -37,8 +37,8 @@ module io(
     output       mem_en_load,
     output       mem_en_store
 );
-    reg [7:0] load_register;
-    reg [7:0] store_register;
+    reg [7:0] load_register = 0;
+    reg [7:0] store_register = 0;
 
     assign data_load = en_load && addr_load == 'b1111111110 ? load_register
                      : en_load && addr_load == 'b1111111111 ? store_register

@@ -40,7 +40,6 @@ module progrunner_test();
 
     reg  [ 7:0] io_input;
     wire [ 7:0] io_output;
-    reg  [ 7:0] exp_io_output;
 
     core dut(
         .clk(clk),
@@ -68,22 +67,26 @@ module progrunner_test();
         .data_load(data_in)
     );
 
-    reg         initialized;
-    reg  [31:0] clock_count;
-    reg  [15:0] code_vector [0:1000];
-    reg  [39:0] io_in_vector [0:1000];
-    wire [31:0] io_in_next_change;
-    wire [ 7:0] io_in_next_value;
-    reg  [31:0] io_in_idx;
-    reg  [ 7:0] prev_io_output;
-    assign { io_in_next_change, io_in_next_value } = io_in_vector[io_in_idx];
+    reg        initialized = 0;
+    reg [31:0] clock_count = 0;
+    reg [15:0] code_vector [0:1000];
+    reg [39:0] io_in_vector [0:1000];
+    reg [31:0] io_in_next_change = 0;
+    reg [ 7:0] io_in_next_value = 0;
+    reg [31:0] io_in_idx = 0;
+    reg [ 7:0] prev_io_output = 0;
     always @(posedge clk) begin
-        if (clock_count == io_in_next_change) begin
+        if (io_in_next_change == 0) begin
+            io_in_next_change <= io_in_vector[io_in_idx][39:8] + clock_count;
+            io_in_next_value <= io_in_vector[io_in_idx][7:0];
             io_in_idx <= io_in_idx + 1;
             io_input <= io_in_next_value;
             if (DEBUG_IO_IN) begin
                 $display("[%8x:ioin] changed -> 0b%b == %d", clock_count, io_in_next_value, io_in_next_value);
             end
+        end
+        else begin
+            io_in_next_change <= io_in_next_change - 1;
         end
     end
 
@@ -91,12 +94,11 @@ module progrunner_test();
 
     initial begin
         //$readmemb("fib_code.mem", code_vector);
-        $readmemb("xorshift_code.mem", code_vector);
-        $readmemb("no_io_signals", io_in_vector);
+        //$readmemb("no_io_signals.mem", io_in_vector);
+        $readmemb("counter_code.mem", code_vector);
+        $readmemb("counter_io.mem", io_in_vector);
         clk = 0;
         rst = 1;
-        initialized = 0;
-        clock_count = 0;
         #20;
         rst = 0; 
         initialized = 1;
