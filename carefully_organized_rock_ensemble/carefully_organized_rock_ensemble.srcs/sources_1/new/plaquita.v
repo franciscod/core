@@ -50,11 +50,11 @@ module plaquita(
     assign rst = sw[0];
     
     reg  [15:0] instruction;
-    reg  [ 7:0] data_in;
     
     wire        en_store;
     wire        en_load;
     wire [ 7:0] data_out;
+    wire [ 7:0] data_in;
     wire [ 9:0] addr;
     wire [ 8:0] ip;
 
@@ -79,12 +79,21 @@ module plaquita(
         .io_input(io_in),
         .io_output(io_out)
     );
-    
-    assign led[3:0] = data_out[3:0];
+
+    mem mem(
+        .clk(clk),
+        .en_store(en_store),
+        .addr_store(addr),
+        .data_store(data_out),
+        .en_load(en_load),
+        .addr_load(addr),
+        .data_load(data_in)
+    );
+
     reg [15:0] progvector [0:1000];
     
     initial begin
-        $readmemb("plaquita_code.mem", progvector);
+        $readmemb("counter_code.mem", progvector);
         $display("ola");
     end
 
