@@ -137,9 +137,7 @@ module core(
                 : doing_load  ? (doing_load_imm  ? addr_imm : ((ds << 2) + reg_b))
                 : 10'bZ;
 
-    assign mem_addr = mem_en_load || mem_en_store
-                    ? addr
-                    : 10'bZ;
+    assign mem_addr = addr;
     assign mem_store = reg_a;
 
     assign write_arg = doing_movr ? reg_b

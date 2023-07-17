@@ -48,8 +48,9 @@ module plaquita(
     
     wire rst;
     assign rst = sw[0];
-    
-    reg  [15:0] instruction;
+
+    //reg  [15:0] instruction;
+    wire [15:0] instruction;
     
     wire        en_store;
     wire        en_load;
@@ -97,8 +98,10 @@ module plaquita(
         $display("ola");
     end
 
+    assign instruction = progvector[ip];
+
     always @(posedge clk) begin
-        instruction = progvector[ip];
+        //instruction = progvector[ip];
         if (instruction === 'bX) begin
             $display("tried to fetch out of instruction bounds, finishing.");
             $finish;
