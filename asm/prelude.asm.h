@@ -28,11 +28,15 @@
 
 // Pseudo instructions
 #define calli(addr)   \
+	push(lr);     \
 	movi lr addr; \
-	xchg lr ip
+	xchg lr ip;   \
+	pop(lr)
 #define callr(reg)    \
+	push(lr);     \
 	movr lr reg;  \
-	xchg lr ip
+	xchg lr ip    \
+	pop(lr)
 
 #define ret           \
 	movr ip lr

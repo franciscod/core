@@ -187,7 +187,8 @@ next_random:
 
 // Timed for 10Mhz
 wait_ms:
-	calli(wait_one_ms)
+	calli(wait_half_ms)
+	calli(wait_half_ms)
 	setcc one
 	sub juanca ONE
 	setcc and z
@@ -195,11 +196,11 @@ wait_ms:
 	jmpi(wait_ms)
 	ret
 
-wait_one_ms:
+wait_half_ms:
 	push(juanca)
 	setcc one
-	movi juanca 500
-loop_wait_one_ms:
+	movi juanca 250
+loop_wait_half_ms:
 	movr bh bh
 	movr bh bh
 	movr bh bh
@@ -219,6 +220,6 @@ loop_wait_one_ms:
 	sub juanca ONE
 	setcc and z
 	maybe add ip ONE
-	jmpi(loop_wait_one_ms)
+	jmpi(loop_wait_half_ms)
 	pop(juanca)
 	ret
