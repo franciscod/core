@@ -97,7 +97,7 @@ module progrunner_test();
         //$readmemb("counter_code.mem", code_vector);
         //$readmemb("counter_io.mem", io_in_vector);
         $readmemb("simon_code.mem", code_vector);
-        $readmemb("no_io_signals.mem", io_in_vector);
+        $readmemb("simon_io.mem", io_in_vector);
         clk = 0;
         rst = 1;
         #20;

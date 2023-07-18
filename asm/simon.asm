@@ -68,7 +68,7 @@ loop:
 	game:
 		// begin reset random
 		movi RAND_0 XORSHIFT_INIT_0
-		movi RAND_0 XORSHIFT_INIT_1
+		movi RAND_1 XORSHIFT_INIT_1
 		// end reset random
 
 		movr CURRENT_LEVEL LEVEL
@@ -87,8 +87,8 @@ loop:
 			jmpi(show_pattern)
 
 		// begin reset random
-		movi a XORSHIFT_INIT_0
-		movi b XORSHIFT_INIT_1
+		movi RAND_0 XORSHIFT_INIT_0
+		movi RAND_1 XORSHIFT_INIT_1
 		// end reset random
 
 		movr CURRENT_LEVEL LEVEL
