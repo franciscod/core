@@ -21,7 +21,6 @@ loop:
 	srl  juanca 5
 	xor  b      juanca
 
-	calli(xorshift_next)
 	storei [0x3FF] a
 	storei [0x3FF] b
 

@@ -42,11 +42,9 @@
 #define jmpr(reg)     \
 	movr ip reg
 
-#define push(reg)     \
-	storer sp reg \
-	movr juanca 1 \
-	sub sp juanca
+#define push(reg)        \
+	storer [sp] reg; \
+	add sp wh
 #define pop(reg)      \
-	movr juanca 1 \
-	add sp juanca \
-	loadr reg sp
+	sub sp wh;    \
+	loadr reg [sp]

@@ -152,11 +152,11 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="slower_core.bd" FileRelPathName="ip/slower_core_clk_wiz_0_0/slower_core_clk_wiz_0_0.xci">
-          <Proxy FileSetName="slower_core_clk_wiz_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="slower_core.bd" FileRelPathName="ip/slower_core_plaquita_0_0/slower_core_plaquita_0_0.xci">
           <Proxy FileSetName="slower_core_plaquita_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="slower_core.bd" FileRelPathName="ip/slower_core_clk_wiz_0_0/slower_core_clk_wiz_0_0.xci">
+          <Proxy FileSetName="slower_core_clk_wiz_0_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PGENDIR/sources_1/bd/slower_core/hdl/slower_core_wrapper.v">

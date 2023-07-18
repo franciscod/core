@@ -94,8 +94,7 @@ module plaquita(
     reg [15:0] progvector [0:1000];
     
     initial begin
-        $readmemb("counter_code.mem", progvector);
-        $display("ola");
+        $readmemb("simon_code.mem", progvector);
     end
 
     assign instruction = progvector[ip];
