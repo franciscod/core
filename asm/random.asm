@@ -3,7 +3,7 @@
 
 init:
 	movi a XORSHIFT_INIT_0
-	movi a XORSHIFT_INIT_1
+	movi b XORSHIFT_INIT_1
 loop:
 	movr juanca b
 	srl  juanca 7
