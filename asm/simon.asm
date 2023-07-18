@@ -174,7 +174,7 @@ next_random:
 	srl  juanca 5
 	xor  RAND_1 juanca
 	movi juanca 6
-	and  RAND_0 juanca
+	and  juanca RAND_0
 	add  ip     juanca
 	movi juanca 1
 	ret
