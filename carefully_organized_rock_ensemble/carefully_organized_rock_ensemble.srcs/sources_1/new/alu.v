@@ -38,30 +38,42 @@ module alu(
         : $signed($signed(a) >>> shift_imm);
     wire [8:0] shift_left = a << shift_imm;
  
-    wire [7:0] result = op == 'b000 ? a&b
-                      : op == 'b001 ? a|b
-                      : op == 'b010 ? a^b
-                      : op == 'b011 ? a_plus_b[7:0]
-                      : op == 'b100 ? a_sub_b[7:0]
-                      : op == 'b101 ? a_sub_b[7:0]
-                      : op == 'b110 ? shift_right
-                      : op == 'b111 ? shift_left[7:0]
-                      : 'bz;
+    reg  [7:0] result;
+
+    always @(*) begin
+        case (op)
+            3'b000: result <= a&b;
+            3'b001: result <= a|b;
+            3'b010: result <= a^b;
+            3'b011: result <= a_plus_b[7:0];
+            3'b100: result <= a_sub_b[7:0];
+            3'b101: result <= a_sub_b[7:0];
+            3'b110: result <= shift_right;
+            3'b111: result <= shift_left[7:0];
+        endcase
+    end
+
+    // FLAGS
+    reg  c;
+    wire n = result[7];
+    reg  v;
+    wire z = result == 0;
+    always @(*) begin
+        case (op)
+            3'b000: begin c <= 0;             v <= 0; end
+            3'b001: begin c <= 0;             v <= 0; end
+            3'b010: begin c <= 0;             v <= 0; end
+            3'b011: begin c <= a_plus_b[8];   v <= a[7] == b[7] && a[7] != result[7]; end
+            3'b100: begin c <= a_sub_b[8];    v <= a[7] != b[7] && a[7] != result[7]; end
+            3'b101: begin c <= a_sub_b[8];    v <= a[7] != b[7] && a[7] != result[7]; end
+            3'b110: begin c <= 0;             v <= 0; end
+            3'b111: begin c <= shift_left[8]; v <= 0; end
+        endcase
+    end
 
     // Use the ALU result unless we are doing comparisons
     assign r = op != 'b101 ? result : a;
 
-    wire c = op == 'b011 ? a_plus_b[8]
-           : op == 'b100 ? a_sub_b[8]
-           : op == 'b101 ? a_sub_b[8]
-           : op == 'b111 ? shift_left[8]
-           : 0;
-    wire n = result[7];
-    wire v = op == 'b011 ? a[7] == b[7] && a[7] != result[7]
-           : op == 'b100 ? a[7] != b[7] && a[7] != result[7]
-           : op == 'b101 ? a[7] != b[7] && a[7] != result[7]
-           : 0;
-    wire z = result == 0;
     assign flags = ({ c, n, v, z });
 
 endmodule

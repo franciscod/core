@@ -57,31 +57,45 @@ module core(
     wire       skip = flags[7];
     wire       setcc_s;
 
+    wire [7:0] ip;
     wire [7:0] cs;
     wire [7:0] ds;
 
+    wire doing_movr   = op_code == 0;
+    wire doing_xchg   = op_code == 1;
+    wire doing_loadr  = op_code == 2;
+    wire doing_storer = op_code == 3;
+    wire doing_setcc  = op_code == 5;
+    wire doing_alu    = op_code == 6;
+    wire doing_movi   = op_code == 7;
+    wire doing_loadi  = op_code == 8;
+    wire doing_storei = op_code == 9;
 
-    wire [9:0] addr;
-    
-    wire doing_store_imm = op_code == 9;
-    wire doing_load_imm  = op_code == 8;
-    
-    wire doing_load  = doing_load_imm
-                    || op_code == 2 // loadr
-                     ;
-    wire doing_store = doing_store_imm
-                    || op_code == 3 // storer
-                     ;
+    wire doing_load  = doing_loadi | doing_loadr;
+    wire doing_store = doing_storei | doing_storer;
 
-    wire doing_setcc = op_code == 5;
-    wire doing_alu   = op_code == 6;
-    wire doing_movr  = op_code == 0;
-    wire doing_movi  = op_code == 7;
-    wire doing_xchg  = op_code == 1;
+    reg [9:0] addr;
+    always @(*) begin
+        if (doing_storei | doing_loadi) addr <= addr_imm;
+        else addr <= (ds << 2) + reg_b; // doing_storer | doing_loadr
+    end
 
-    wire [7:0] write_arg;
-    wire [7:0] flags_arg;
-    
+    reg [7:0] write_arg;
+    always @(*) begin
+        if (doing_movr) write_arg <= reg_b;
+        else if (doing_load) write_arg <= mem_load;
+        else if (doing_alu)  write_arg <= alu_out;
+        else write_arg <= imm; // doing_movi
+    end
+
+    reg [7:0] flags_arg;
+    always @(*) begin
+        if (doing_alu) flags_arg <= { flags[7:4],  alu_flags };
+        else flags_arg <= { setcc_s,  flags[6:0] }; // doing_setcc
+    end
+
+    assign instruction_addr = (cs << 2) + ip;
+
     ir ir(
         .data(instruction),
         .skip(skip),
@@ -118,7 +132,6 @@ module core(
       .s(setcc_s)
     );
 
-
     io io(
         .clk(clk),
         .en_store(doing_store),
@@ -132,31 +145,6 @@ module core(
         .mem_en_load(mem_en_load),
         .mem_en_store(mem_en_store)
     );
-
-    assign addr = doing_store ? (doing_store_imm ? addr_imm : ((ds << 2) + reg_b))
-                : doing_load  ? (doing_load_imm  ? addr_imm : ((ds << 2) + reg_b))
-                : 10'bZ;
-
-    assign mem_addr = addr;
-    assign mem_store = reg_a;
-
-    assign write_arg = doing_movr ? reg_b
-                     : doing_movi ? imm
-                     : doing_load ? mem_load
-                     : doing_alu  ? alu_out
-                     : 8'bZ;
-
-    assign flags_arg = doing_alu   ? { flags[7:4],  alu_flags }
-                     : doing_setcc ? { setcc_s,  flags[6:0] }
-                     : 8'bZ;
-
-    wire [7:0] ip;
-    reg [8:0] instruction_addr_reg;
-    always @(posedge clk) begin
-        instruction_addr_reg <= (cs << 2) + ip;
-    end
-    //assign instruction_addr = (cs << 2) + ip;
-    assign instruction_addr = instruction_addr_reg;
 
     registers registers(
         .clk(clk),
@@ -180,4 +168,7 @@ module core(
         .r_cs(cs),
         .r_ds(ds)
     );
+
+    assign mem_store = mem_en_store ? reg_a : 10'bz;
+    assign mem_addr  = mem_en_load  ? addr  : 10'bz;
 endmodule
