@@ -62,7 +62,7 @@ module plaquita(
     wire [ 7:0] io_in;
     wire [ 7:0] io_out;
 
-    assign io_in = sw & btn;
+    assign io_in = { sw, btn };
     assign io_out[3:0] = led;
  
     core dut(

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Tue Jul 18 01:18:21 2023" VIVADOVERSION="2023.1">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Tue Jul 18 17:00:11 2023" VIVADOVERSION="2023.1">
 
   <SYSTEMINFO ARCH="zynq" DEVICE="7z020" NAME="slower_core" PACKAGE="clg400" SPEEDGRADE="-1"/>
 
@@ -619,12 +619,12 @@
             <CONNECTION INSTANCE="External_Ports" PORT="sysclk"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="locked" SIGIS="undef"/>
         <PORT CLKFREQUENCY="10000000" DIR="O" NAME="core_clk" SIGIS="clk" SIGNAME="clk_wiz_0_core_clk">
           <CONNECTIONS>
             <CONNECTION INSTANCE="plaquita_0" PORT="sysclk"/>
           </CONNECTIONS>
         </PORT>
+        <PORT DIR="O" NAME="locked" SIGIS="undef"/>
       </PORTS>
       <BUSINTERFACES/>
     </MODULE>
