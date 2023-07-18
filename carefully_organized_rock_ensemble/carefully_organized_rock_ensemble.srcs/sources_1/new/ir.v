@@ -36,7 +36,7 @@ module ir(
     output [3:0] setcc_expected
 );
     wire skipeable_bit = data[8];
-    wire skipped = !data[15] && data[14:12] != 3'b111 && skipeable_bit && skip;
+    wire skipped = (!data[15] && data[14:12] != 3'b111) && (skipeable_bit && skip);
     
     assign op_code = skipped  ? 0 // skipped ins become nop == movr r0 r0
                    : data[15] ? { data[15], 2'b00, data[14] } 

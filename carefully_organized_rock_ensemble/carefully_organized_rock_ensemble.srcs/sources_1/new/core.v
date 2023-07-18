@@ -36,8 +36,8 @@ module core(
     input  [7:0]  io_input,
     output [7:0]  io_output
 );
-    wire [3:0] op_code;     // TODO: control
-    wire [2:0] subop_code;  // TODO: setcc
+    wire [3:0] op_code;
+    wire [2:0] subop_code;
     wire [9:0] addr_imm;        
     wire [7:0] imm;
     wire [3:0] sel_ra;
@@ -71,8 +71,11 @@ module core(
     wire doing_loadi  = op_code == 8;
     wire doing_storei = op_code == 9;
 
-    wire doing_load  = doing_loadi | doing_loadr;
+    wire doing_load  = doing_loadi  | doing_loadr;
     wire doing_store = doing_storei | doing_storer;
+
+    wire [7:0] io_load;
+    wire [7:0] load_result = mem_en_load ? mem_load : io_load;
 
     reg [9:0] addr;
     always @(*) begin
@@ -83,7 +86,7 @@ module core(
     reg [7:0] write_arg;
     always @(*) begin
         if (doing_movr) write_arg <= reg_b;
-        else if (doing_load) write_arg <= mem_load;
+        else if (doing_load) write_arg <= load_result;
         else if (doing_alu)  write_arg <= alu_out;
         else write_arg <= imm; // doing_movi
     end
@@ -96,8 +99,13 @@ module core(
 
     assign instruction_addr = (cs << 2) + ip;
 
+    reg  [15:0] instruction_reg;
+    always @(posedge clk) begin
+        instruction_reg <= instruction;
+    end
+
     ir ir(
-        .data(instruction),
+        .data(instruction_reg),
         .skip(skip),
 
         .op_code(op_code),
@@ -139,7 +147,7 @@ module core(
         .data_store(reg_a),
         .en_load(doing_load),
         .addr_load(addr),
-        .data_load(mem_load),
+        .data_load(io_load),
         .io_input(io_input),
         .io_output(io_output),
         .mem_en_load(mem_en_load),
@@ -170,5 +178,5 @@ module core(
     );
 
     assign mem_store = mem_en_store ? reg_a : 10'bz;
-    assign mem_addr  = mem_en_load  ? addr  : 10'bz;
+    assign mem_addr  = mem_en_load | mem_en_store ? addr : 10'bz;
 endmodule

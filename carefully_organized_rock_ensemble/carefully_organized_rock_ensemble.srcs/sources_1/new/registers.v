@@ -45,25 +45,7 @@ module registers(
 
     reg [7:0] read_a;
     reg [7:0] read_b;
-    always @(posedge clk) begin
-        case (sel_read_b)
-            4'b0000: read_b <= 'b0000_0000;
-            4'b0001: read_b <= bank[1];
-            4'b0010: read_b <= bank[2];
-            4'b0011: read_b <= bank[3];
-            4'b0100: read_b <= bank[4];
-            4'b0101: read_b <= bank[5];
-            4'b0110: read_b <= bank[6];
-            4'b0111: read_b <= bank[7];
-            4'b1000: read_b <= bank[8];
-            4'b1001: read_b <= bank[9] + 1;
-            4'b1010: read_b <= bank[10];
-            4'b1011: read_b <= bank[11];
-            4'b1100: read_b <= bank[12];
-            4'b1101: read_b <= bank[13];
-            4'b1110: read_b <= bank[14];
-            4'b1111: read_b <= 'b1111_1111;
-        endcase
+    always @(*) begin
         case (sel_read_a)
             4'b0000: read_a <= 'b0000_0000;
             4'b0001: read_a <= bank[1];
@@ -81,6 +63,24 @@ module registers(
             4'b1101: read_a <= bank[13];
             4'b1110: read_a <= bank[14];
             4'b1111: read_a <= 'b1111_1111;
+        endcase
+        case (sel_read_b)
+            4'b0000: read_b <= 'b0000_0000;
+            4'b0001: read_b <= bank[1];
+            4'b0010: read_b <= bank[2];
+            4'b0011: read_b <= bank[3];
+            4'b0100: read_b <= bank[4];
+            4'b0101: read_b <= bank[5];
+            4'b0110: read_b <= bank[6];
+            4'b0111: read_b <= bank[7];
+            4'b1000: read_b <= bank[8];
+            4'b1001: read_b <= bank[9] + 1;
+            4'b1010: read_b <= bank[10];
+            4'b1011: read_b <= bank[11];
+            4'b1100: read_b <= bank[12];
+            4'b1101: read_b <= bank[13];
+            4'b1110: read_b <= bank[14];
+            4'b1111: read_b <= 'b1111_1111;
         endcase
     end
 

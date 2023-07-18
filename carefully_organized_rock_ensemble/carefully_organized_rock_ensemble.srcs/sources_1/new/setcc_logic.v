@@ -30,13 +30,19 @@ module setcc_logic(
     output s
 );
     wire flags_comparison = (mask & ~(expected_flags ^ current_flags)) == mask;
-    assign s = op == 3'b000 ? 0                                // ZERO
-             : op == 3'b001 ? ~(previous_s | flags_comparison) // NOR
-             : op == 3'b010 ? previous_s ^ flags_comparison    // XOR
-             : op == 3'b011 ? ~(previous_s & flags_comparison) // NAND
-             : op == 3'b100 ? previous_s & flags_comparison    // AND
-             : op == 3'b101 ? previous_s == flags_comparison   // XNOR
-             : op == 3'b110 ? previous_s | flags_comparison    // OR
-             : op == 3'b111 ? 1                                // ONE
-             : 'bX;
+
+    reg s_result;
+    always @(*) begin
+        case (op)
+            3'b000: s_result <= 0;                                // ZERO
+            3'b001: s_result <= ~(previous_s | flags_comparison); // NOR
+            3'b010: s_result <= previous_s ^ flags_comparison;    // XOR
+            3'b011: s_result <= ~(previous_s & flags_comparison); // NAND
+            3'b100: s_result <= previous_s & flags_comparison;    // AND
+            3'b101: s_result <= previous_s == flags_comparison;   // XNOR
+            3'b110: s_result <= previous_s | flags_comparison;    // OR
+            3'b111: s_result <= 1;                                // ONE
+        endcase
+    end
+    assign s = s_result;
 endmodule
