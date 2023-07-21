@@ -73,22 +73,27 @@ module core(
 
     wire doing_load  = doing_loadi  | doing_loadr;
     wire doing_store = doing_storei | doing_storer;
+    wire is_load_from_imm = doing_storei | doing_loadi;
+    wire write_register = doing_movr | doing_load | doing_alu | doing_movi;
+    wire write_flag = doing_alu | doing_setcc;
 
     wire [7:0] io_load;
     wire [7:0] load_result = mem_en_load ? mem_load : io_load;
 
     reg [9:0] addr;
     always @(*) begin
-        if (doing_storei | doing_loadi) addr <= addr_imm;
-        else addr <= (ds << 2) + reg_b; // doing_storer | doing_loadr
+        if (is_load_from_imm) addr <= addr_imm;
+        else addr <= (ds << 2) + reg_b;
     end
 
     reg [7:0] write_arg;
     always @(*) begin
-        if (doing_movr) write_arg <= reg_b;
-        else if (doing_load) write_arg <= load_result;
-        else if (doing_alu)  write_arg <= alu_out;
-        else write_arg <= imm; // doing_movi
+        case ({doing_movr, doing_load, doing_alu, doing_movi})
+            4'b1000: write_arg <= reg_b;
+            4'b0100: write_arg <= load_result;
+            4'b0010: write_arg <= alu_out;
+            4'b0001: write_arg <= imm;
+        endcase
     end
 
     reg [7:0] flags_arg;
@@ -103,6 +108,9 @@ module core(
     always @(posedge clk) begin
         instruction_reg <= instruction;
     end
+
+    assign mem_store = mem_en_store ? reg_a : 10'bz;
+    assign mem_addr  = mem_en_load | mem_en_store ? addr : 10'bz;
 
     ir ir(
         .data(instruction_reg),
@@ -160,11 +168,11 @@ module core(
         .sel_read_a(sel_ra),
         .sel_read_b(sel_rb),
         .exchange_a_b(doing_xchg),
-        .en_write_reg(doing_movr | doing_load | doing_alu | doing_movi),
+        .en_write_reg(write_register),
         .sel_write_reg(sel_ra),
         .data_write_reg(write_arg),
 
-        .en_write_flags(doing_alu | doing_setcc),
+        .en_write_flags(write_flag),
         .data_write_flags(flags_arg),
         .en_write_ip(1),
         .data_write_ip(ip+1),
@@ -176,7 +184,4 @@ module core(
         .r_cs(cs),
         .r_ds(ds)
     );
-
-    assign mem_store = mem_en_store ? reg_a : 10'bz;
-    assign mem_addr  = mem_en_load | mem_en_store ? addr : 10'bz;
 endmodule

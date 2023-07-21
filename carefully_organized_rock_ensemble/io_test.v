@@ -59,7 +59,7 @@ module io_test();
     always #5 clk = ~clk;
 
     initial begin
-        $readmemb("testdata_mem.mem", testvector);
+        $readmemb("testdata_io.mem", testvector);
         clk = 0;
         vectornum = 0;
         errors = 0;
