@@ -1,0 +1,18 @@
+/*
+en_store     mem_en_store en_load      mem_en_load
+| addr_store | data_store | addr_load  | data_load  io_input  io_output
+| |          | |          | |          | |          |         |
+X_XXXXXXXXXX_X_XXXXXXXX___X_XXXXXXXXXX_X_XXXXXXXX___XXXXXXXX__XXXXXXXX*/
+
+0_XXXXXXXXXX_0_XXXXXXXX___0_XXXXXXXXXX_0_ZZZZZZZZ___00000000__00000000 // Do nothing. Output is 00000000. Input is 00000000
+1_1111111111_0_01010101___1_1111111110_0_00000000___11111111__00000000 // Change output. Assert previous input. Output is 00000000. Input it 11111111.
+0_XXXXXXXXXX_0_XXXXXXXX___1_1111111110_0_11111111___10101010__01010101 // Assert previous input. Output is 01010101. Input is 10101010.
+1_1111111111_0_11001100___0_XXXXXXXXXX_0_ZZZZZZZZ___00110011__01010101 // Change output. Output is 11001100. Input is 00110011.
+0_XXXXXXXXXX_0_XXXXXXXX___0_XXXXXXXXXX_0_ZZZZZZZZ___00110011__11001100 // Do nothing. Output is 11001100. Input is 00110011.
+0_XXXXXXXXXX_0_XXXXXXXX___1_1111111110_0_00110011___11110000__11001100 // Assert previous input. Output is 11001100.
+1_0000000000_1_00001111___1_0000000000_1_ZZZZZZZZ___11111111__11001100 // Load and store from memory. Output is 11001100.
+1_1111111101_1_00001111___1_1111111101_1_ZZZZZZZZ___11111111__11001100 // Load and store from memory. Output is 11001100.
+1_1111111110_0_00001111___1_1111111101_1_ZZZZZZZZ___11111111__11001100 // Load from memory. Store to IO (ignored). Output is 11001100.
+1_1111111111_0_00001111___1_1111111101_1_ZZZZZZZZ___11111111__11001100 // Load from memory. Store to IO (changes output). Output is 11001100.
+1_1111111101_1_00001111___1_1111111110_0_11111111___00000000__00001111 // Load from IO. Store to memory. Output is 00001111.
+1_1111111101_1_00001111___1_1111111111_0_00001111___00000000__00001111 // Load from IO. Store to memory. Output is 00001111.

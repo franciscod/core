@@ -1,0 +1,52 @@
+Design sources
+  - Verilog
+    - alu.v
+    - core.v
+    - io.v
+    - ir.v
+    - mem.v
+    - plaquita.v
+    - registers.v
+    - setcc_logic.v
+  - Memory files
+    - programs/counter_code.mem
+    - programs/fib_code.mem
+    - programs/random-with-sleep_code.mem
+    - programs/random_code.mem
+    - programs/simon_code.mem
+    - programs/xorshift_code.mem
+  - Cambiando la lectura del .mem por cualquiera de los otros programas cambia el programa
+  - Para sintetizar plaquita en la Zybo hay que wrappearlo de forma que `sysclk` sea de 10Mhz (nosotros usamos el Clocking Wizard para esto)
+
+Simulation sources
+  - Testbench set
+    - All design sources
+    - Verilog
+      - testbench/alu_test.v
+      - testbench/core_test.v
+      - testbench/io_test.v
+      - testbench/mem_test.v
+      - testbench/registers_test.v
+      - testbench/setcc_test.v
+    - Memory files
+      - testbench/testdata_alu.mem
+      - testbench/testdata_core.mem
+      - testbench/testdata_io.mem
+      - testbench/testdata_mem.mem
+      - testbench/testdata_registers.mem
+      - testbench/testdata_setcc.mem
+    - Usá "Set as Top" para cambiar de test
+
+  - Progrunner set
+    - All design sources
+    - Verilog
+      - progrunner/progrunner_test.v
+    - Memory files
+      - progrunner/counter_code.mem
+      - progrunner/counter_io.mem
+      - progrunner/fib_code.mem
+      - progrunner/no_io_signals.mem
+      - progrunner/simon_code.mem
+      - progrunner/simon_io.mem
+      - progrunner/xorshift_code.mem
+    - Comentá y descomentá el programa (y las señales de io) para probar los distintos programas
