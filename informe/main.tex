@@ -18,7 +18,7 @@
 \maketitle
 
 \begin{abstract}
-El siguiente informe detalla el trabajo de diseño, verificación e implementación llevado a cabo por Ignacio Losiggio y Francisco Demartino bajo el marco de la materia \emph{``Programación de Softcores en FPGAs"}. El informe consiste en cuatro partes que corresponden a etapas del trabajo: diseño, implementación, evaluación en un simulador y construcción de software auxiliar para ayudar al desarrollo de programas. Aunque el trabajo realizado no sucedió con etapas tan marcadas creemos que esta forma de narrarlo da pié a un mejor informe.
+El siguiente informe detalla el trabajo de diseño, verificación e implementación llevado a cabo por Ignacio Losiggio y Francisco Demartino bajo el marco de la materia \emph{``Programación de Softcores en FPGAs"} dictada por David Alejandro González Márquez. El informe consiste en cuatro partes que corresponden a etapas del trabajo: diseño, implementación, evaluación en un simulador y construcción de software auxiliar para ayudar al desarrollo de programas. Aunque el trabajo realizado no sucedió con etapas tan marcadas creemos que esta forma de narrarlo da pié a un mejor informe.
 \end{abstract}
 
 \tableofcontents
@@ -201,7 +201,7 @@ En las siguientes secciones, el Encoding de cada instrucción representa bits en
 \subsubsection{\texttt{sub r4a r4b}}
 \begin{itemize}
     \item \textbf{Encoding:} \texttt{0110 100 S RRRR RRRR}
-    \item \textbf{Operación:} \texttt{r4a} \Leftarrow \texttt{r4a} - \texttt{r4b}
+    \item \textbf{Operación:} \texttt{r4a} $\Leftarrow$ \texttt{r4a} - \texttt{r4b}
     \item \textbf{Flags:}
         \begin{itemize}
             \item \textbf{c:} 1 si \texttt{r4b} era mayor a \texttt{r4a} (interpretación sin signo)
@@ -227,7 +227,7 @@ En las siguientes secciones, el Encoding de cada instrucción representa bits en
 \subsubsection{\texttt{xor r4a r4b}}
 \begin{itemize}
     \item \textbf{Encoding:} \texttt{0110 010 S RRRR RRRR}
-    \item \textbf{Operación:} \texttt{r4a} \Leftarrow \texttt{r4a} \^{} \texttt{r4b}
+    \item \textbf{Operación:} \texttt{r4a} $\Leftarrow$ \texttt{r4a} \^{} \texttt{r4b}
     \item \textbf{Flags:}
         \begin{itemize}
             \item \textbf{c:} Siempre cero
@@ -240,7 +240,7 @@ En las siguientes secciones, el Encoding de cada instrucción representa bits en
 \subsubsection{\texttt{or r4a r4b}}
 \begin{itemize}
     \item \textbf{Encoding:} \texttt{0110 001 S RRRR RRRR}
-    \item \textbf{Operación:} \texttt{r4a} \Leftarrow \texttt{r4a} \textbar{} \texttt{r4b}
+    \item \textbf{Operación:} \texttt{r4a} $\Leftarrow$ \texttt{r4a} \textbar{} \texttt{r4b}
     \item \textbf{Flags:}
         \begin{itemize}
             \item \textbf{c:} Siempre cero
@@ -253,7 +253,7 @@ En las siguientes secciones, el Encoding de cada instrucción representa bits en
 \subsubsection{\texttt{and r4a r4b}}
 \begin{itemize}
     \item \textbf{Encoding:} \texttt{0110 000 S RRRR RRRR}
-    \item \textbf{Operación:} \texttt{r4a} \Leftarrow \texttt{r4a} \& \texttt{r4b}
+    \item \textbf{Operación:} \texttt{r4a} $\Leftarrow$ \texttt{r4a} \& \texttt{r4b}
     \item \textbf{Flags:}
         \begin{itemize}
             \item \textbf{c:} Siempre cero
@@ -266,7 +266,7 @@ En las siguientes secciones, el Encoding de cada instrucción representa bits en
 \subsubsection{\texttt{setcc op cond}}
 \begin{itemize}
     \item \textbf{Encoding:} \texttt{0101 OOO S MMMM FFFF}
-    \item \textbf{Operación:} \texttt{flags[7]} \Leftarrow \texttt{op}(\texttt{flags[7]}, \texttt{cond})
+    \item \textbf{Operación:} \texttt{flags[7]} $\Leftarrow$ \texttt{op}(\texttt{flags[7]}, \texttt{cond})
         \begin{itemize}
             \item \textbf{Códigos de operación:}
                 \begin{itemize}
@@ -358,6 +358,28 @@ En \texttt{registers.v} se implementa nuestro banco de 16 registros. El mismo po
 
 Finalmente nuestro banco de registros implementa la instrucción \texttt{xchg} por medio de la señal \texttt{exchange\_a\_b} la cual causa un intercambio entre los registros seleccionados por los dos puertos de lectura. Las escrituras por medio de intercambios o del puerto de escritura toman precedencia sobre los puertos de escritura dedicados (\texttt{ip}, \texttt{flags}).
 
+\subsection{\texttt{io.v}}
+\begin{verbatim}
+module io(
+    input        clk,
+
+    input        en_store,
+    input  [9:0] addr_store,
+    input  [7:0] data_store,
+
+    input        en_load,
+    input  [9:0] addr_load,
+    output [7:0] data_load,
+    
+    input  [7:0] io_input,
+    output [7:0] io_output,
+
+    output       mem_en_load,
+    output       mem_en_store
+);
+\end{verbatim}
+En \texttt{io.v} se implementa la lógica de interacción con el mundo exterior. El módulo de \texttt{io} recibe las señales propias de una carga a memoria y sólo habilita la misma si la dirección en cuestión no es una de las reservadas (\texttt{0x3FF} y \texttt{0x3FE}). Durante cada clock \texttt{io.v} actualiza su registro interno del puerto de entrada y expone constantemente el último valor escrito al puerto de salida.
+
 \subsection{\texttt{setcc\_logic.v}}
 \begin{verbatim}
 module setcc_logic(
@@ -392,7 +414,7 @@ module ir(
 \end{verbatim}
 \texttt{ir.v} implementa la decodificación de las instrucciones de nuestra ISA. Es un componente completamente combinacional. El mecanismo de ejecución condicional se implementa en este componente: cuando una instrucción \emph{skipeable} es fetcheada el módulo emitirá las señales necesarias para causar un \texttt{nop} (\texttt{mov bh, bh}) si la señal \texttt{skip} se encuentra activa.
 
-\subsection{core.v}
+\subsection{\texttt{core.v}}
 \begin{verbatim}
 module core(
     input         clk,
@@ -476,16 +498,16 @@ Como parte de la entrega se incluyen cuatro programas escritos en ensamblador:
     \item \texttt{counter.asm}: Un contador binario que es incrementado luego de apretar un botón de la placa
     \item \texttt{fib.asm}: Cálculo iterativo de números de fibonacci (se visualizan en binario por medio de los leds)
     \item \texttt{random.asm}, \texttt{random-with-sleep.asm}: Generador de números pseudoaleatorio por medio de un \texttt{xorshift} de 16 bits (los números son visibles por medio de los leds)
-    \item \texttt{simon.asm}: El juego solicitado por parte de la cátedra
+    \item \texttt{simon.asm}: El juego ``Simon" solicitado por parte de la cátedra
 \end{itemize}
 
-\section{Conclusiones}
+\section{Conclusiones y código de ejemplo}
 
-Para cerrar este informe queremos mostrar algunas partes interesantes del código que escribimos durante el desarrollo del trabajo. No consideramos que el diseño (para la ISA, tooling o demos) propuesto sea \emph{``bueno"}  pero sí creemos que fué divertido de pensar y construir.
+Para cerrar este informe queremos mostrar algunas partes interesantes del código que escribimos durante el desarrollo del trabajo. No consideramos que el diseño (para la ISA, tooling o demos) propuesto sea \emph{``bueno"} pero sí creemos que, además de haber sido una gran experiencia que nos acercó al mundo FPGA, el diseño fué divertido de pensar y construir.
 
 \subsection{Calcular $2^k$ para $k$ pequeño}
 
-Durante el desarrollo del simon quisimos utilizar un generador de números pseudoaleatorios masomenos realista. Decidimos utilizar un xorshifter con un estado de 16 bits. Un problema de esto es que nosotros queríamos elegir un led al azar (\texttt{0b1000}, \texttt{0b0100}, \texttt{0b0010}, \texttt{0b0001}) pero el generador de números nos otorgaba un número al azar (\texttt{0b00}, \texttt{0b01}, \texttt{0b10}, \texttt{0b11}). En un entorno de desarrollo normal hubiéramos hecho \texttt{1 << n}, pero carecíamos de una operación de shift arbitrario. El poder utilizar el \texttt{ip} como registro de propósito general jugó a nuestro favor, por lo que pudimos escrbir lo siguiente:
+Durante el desarrollo del Simon quisimos utilizar un generador de números pseudoaleatorios masomenos realista. Decidimos utilizar un xorshifter con un estado de 16 bits. Un problema con esto es que nosotros queríamos elegir un led al azar (\texttt{0b1000}, \texttt{0b0100}, \texttt{0b0010}, \texttt{0b0001}) pero el generador de números nos otorgaba un número al azar (\texttt{0b00}, \texttt{0b01}, \texttt{0b10}, \texttt{0b11}). En un entorno de desarrollo normal hubiéramos hecho \texttt{1 << n}, pero carecíamos de una operación de shift arbitrario. El poder utilizar el \texttt{ip} como registro de propósito general jugó a nuestro favor, por lo que pudimos escrbir lo siguiente:
 \begin{verbatim}
 dos_a_la_k:
 // input: juanca = k (entre 0 y 7)
