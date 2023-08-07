@@ -38,7 +38,7 @@ La ISA posee 16 registros (\texttt{r0} a \texttt{rf}). Todos los registros puede
 Algunos registros son usados implícitamente dentro de varios mecanismos del procesador:
 \begin{itemize}
     \item \texttt{r0}: siempre vale \texttt{0x00}
-    \item \texttt{r8}: usado como destino implícito de las operaciones aritméticas y la instrucción \texttt{setcc}
+    \item \texttt{r8}: usado como destino implícito de flags para las operaciones aritméticas y la instrucción \texttt{setcc}, y para determinar si se skipea una instrucción (detalles en la subsección "Instrucciones")
     \item \texttt{r9}: offset de la próxima instrucción en el segmento de código actual
     \item \texttt{rc}: $\frac{\text{base}}{2}$ del segmento de código actual
     \item \texttt{rd}: $\frac{\text{base}}{4}$ del segmento de datos actual
@@ -73,7 +73,7 @@ Nuestro ensamblador soporta una serie de nombres alternativos o ``alias" que sug
 \end{table}
 
 \subsection{Macros}
-Nuestro lenguaje ensamblador es procesado por \texttt{cpp}, el preprocesador del lenguaje C. En los programas entregados hacemos uso de varios macros ``estándar" para ayudar a la legibilidad de los mismos. Dado que el preprocesador elimina todos los comentarios válidos en el lenguaje C (\texttt{/* comentario */} y \texttt{// comentario}) el uso del mismo nos proporciona una forma sencilla de documentar nuestro código sin tener que implementarla en nuestro ensamblador.
+Nuestro lenguaje ensamblador es procesado por \texttt{cpp}, el preprocesador del lenguaje C. Dado que el preprocesador elimina todos los comentarios válidos en el lenguaje C (\texttt{/* comentario */} y \texttt{// comentario}) el uso del mismo nos proporciona una forma sencilla de documentar nuestro código sin tener que implementarla en nuestro ensamblador. Tambien el preprocesador tiene un sistema para definir macros. En los programas entregados hacemos uso de varios macros ``estándar" para ayudar a la legibilidad del código. 
 
 \subsubsection{\texttt{calli(addr)}}
 \begin{verbatim}
@@ -121,7 +121,7 @@ loadr reg [sp]
 
 \subsection{Instrucciones}
 
-La mayoría de las instrucciones de nuestra ISA son \emph{``skipeables''}. Si en los flags del procesador el bit de skip está en 1, entonces toda instrucción \emph{``skipeable''} que también lo tenga alto se ejecutará como si fuera un \texttt{nop}. La representación del bit de skip en nuestro lenguaje ensamblador es por medio del prefijo \texttt{maybe}. Éste es el único mecanismo de ejecución condicional que nuestro procesador posee (por ejemplo: un salto condicional es \texttt{maybe add ip <reg>}).
+La mayoría de las instrucciones de nuestra ISA son \emph{``skipeables''}. Si en los flags del procesador el bit de skip está en 1, entonces toda instrucción \emph{``skipeable''} que también lo tenga alto se ejecutará como si fuera un \texttt{nop}. La representación del bit de skip en nuestro lenguaje ensamblador es por medio del prefijo \texttt{maybe}. Éste es el único mecanismo de ejecución condicional que nuestro procesador posee (por ejemplo: un salto condicional es \texttt{maybe add ip <reg>}). Notar que si el registro r8 se usa para almacenar un numero negativo y la siguiente instruccion es skipeable, se skipeará (el bit de signo coincide con el de skip siendo el mas significativo)
 
 En las siguientes secciones, el Encoding de cada instrucción representa bits en little endian (el de más a la derecha es el menos significativo). Un guión bajo (\texttt{\_}) indica que el valor en esa posición no se usa.
 
@@ -279,7 +279,9 @@ En las siguientes secciones, el Encoding de cada instrucción representa bits en
                     \item \texttt{110}: OR
                     \item \texttt{111}: Set to one
                 \end{itemize}
-            \item \textbf{Condición:} La condición se describe con una cadena de texto con la forma \texttt{[cC][nN][vV][zZ]}. Las letras minúsculas describen bits de los flags que deben ser cero mientras que las mayúsculas bits que deben ser unos. Sólo se verificará el valor de las letras que formen parte de la condición. \emph{Ejemplo:} \texttt{cNv} es una condición que sólo se hará cierta si el carry es 0, el overflow es cero y el flag de
+            \item \textbf{Condición:} La condición se describe con una cadena de texto con la forma \texttt{[cC][nN][vV][zZ]}. Las letras minúsculas describen bits de los flags que deben ser cero mientras que las mayúsculas bits que deben ser unos. Sólo se verificará el valor de las letras que formen parte de la condición. 
+            \\ 
+            \emph{Ejemplo:} \texttt{cNv} es una condición que sólo se hará cierta si el carry es 0, el overflow es cero y el flag de
             negativo es 1.
         \end{itemize}
         \item \textbf{Flags:}
